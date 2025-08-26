@@ -4,17 +4,20 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Parth Khansali's Portfolio</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Tailwind Play CDN (with cache buster) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries&v=6"></script>
+
+    <!-- Fonts + Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <style type="text/tailwindcss">
-      body {
-        font-family: "Inter", sans-serif;
-        background-color: #f8f9fa;
-      }
+
+    <!-- Plain CSS so it always loads (no special type attr) -->
+    <style>
+      body { font-family: "Inter", sans-serif; background-color: #f8f9fa; }
       html { scroll-behavior: smooth; }
 
-      /* Headings overlay (keeps layout fixed; overlay handles hover) */
+      /* Headings overlay (layout fixed; overlay handles hover) */
       .explode-text { position: relative; display: inline-block; }
       .overlay-chars { position: absolute; inset: 0; z-index: 1; pointer-events: auto; font: inherit; line-height: inherit; letter-spacing: inherit; color: currentColor; }
       .overlay-chars .char { position: absolute; display: block; overflow: visible; }
@@ -24,14 +27,13 @@
       @media (hover: none) { .overlay-chars .char:active .glyph { transform: translateY(-0.24em) scale(1.06); } }
       @media (prefers-reduced-motion: reduce) { .overlay-chars .char .glyph { transition: none !important; } }
 
-      /* Custom cursor */
+      /* Bigger custom cursor */
       .custom-cursor {
-        position: fixed;
-        left: 0; top: 0;
-        width: 18px; height: 18px;
+        position: fixed; left: 0; top: 0;
+        width: 32px; height: 32px;             /* larger base size */
         border-radius: 9999px;
         background: #fff;
-        mix-blend-difference;
+        mix-blend-mode: difference;
         pointer-events: none;
         z-index: 100;
         opacity: 0;
@@ -40,12 +42,10 @@
         will-change: transform, opacity;
       }
       .custom-cursor.is-visible { opacity: 1; }
-      /* Optional: make the cursor slightly larger by default on bigger screens */
-      @media (min-width: 768px) {
-        .custom-cursor { width: 20px; height: 20px; }
-      }
+      @media (min-width: 768px) { .custom-cursor { width: 40px; height: 40px; } }
     </style>
   </head>
+
   <body class="bg-white">
     <div class="flex flex-col min-h-screen">
       <header class="p-8">
@@ -67,7 +67,7 @@
         </nav>
       </header>
 
-      <!-- Hero: pinned to left, vertically centered -->
+      <!-- Hero: left-aligned, vertically centered -->
       <main class="flex-grow flex items-center justify-start px-0">
         <div class="text-left mr-auto w-full pl-4 md:pl-6">
           <h1 class="explode-text font-bold text-black relative leading-[0.95] text-[clamp(3rem,12vw,9.5rem)]">Creativity is</h1>
@@ -75,13 +75,15 @@
         </div>
       </main>
 
-      <!-- Footer: left hint + right scroll CTA -->
+      <!-- Footer -->
       <footer class="p-8 flex items-center justify-between">
+        <!-- Self intro video hint -->
         <a href="#video" class="flex items-center gap-2 text-gray-700 hover:text-gray-900" title="Jump to the self intro video">
           <span class="material-icons text-4xl md:text-5xl">play_circle</span>
           <span class="uppercase tracking-wide font-semibold text-base md:text-lg">Self intro video</span>
           <span class="hidden sm:inline text-gray-500">— below</span>
         </a>
+        <!-- Scroll CTA -->
         <a class="group flex items-center gap-4 text-gray-900" href="#video" aria-label="Scroll to video">
           <span class="text-3xl md:text-4xl font-black tracking-tight">Scroll to watch</span>
           <span class="material-icons text-5xl md:text-6xl motion-safe:animate-bounce" aria-hidden="true">keyboard_double_arrow_down</span>
@@ -89,7 +91,7 @@
       </footer>
     </div>
 
-    <!-- Video section below the hero -->
+    <!-- Video section -->
     <section id="video" class="py-20 px-8 md:px-16 bg-white">
       <div class="max-w-7xl mx-auto">
         <div class="relative w-full overflow-hidden rounded-xl shadow-lg">
@@ -108,7 +110,7 @@
       </div>
     </section>
 
-    <!-- Contact section -->
+    <!-- Contact -->
     <section class="bg-black text-white py-20 px-8 md:px-16" id="contact">
       <div class="max-w-7xl mx-auto">
         <h2 class="text-6xl md:text-8xl font-bold mb-12">Let's connect</h2>
@@ -154,10 +156,10 @@
       </div>
     </section>
 
-    <!-- Custom cursor element -->
+    <!-- Custom cursor -->
     <div class="custom-cursor" id="customCursor"></div>
 
-    <!-- Exact-positioned overlay using Range API; overlay visually replaces original glyphs -->
+    <!-- Overlay script: exact-positioned letters (replaces original visually) -->
     <script>
       function getEffectiveBg(el) {
         let e = el;
@@ -194,6 +196,8 @@
             if (!rects.length) continue;
 
             const r = rects[0];
+            if (r.width === 0 || r.height === 0) continue;
+
             const wrap = document.createElement('span');
             wrap.className = 'char';
             wrap.style.left = (r.left - elRect.left) + 'px';
@@ -216,7 +220,7 @@
         };
 
         if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(render);
+          document.fonts.ready.then(render).catch(render);
         } else {
           window.addEventListener('load', render, { once: true });
         }
@@ -232,25 +236,21 @@
       });
     </script>
 
-    <!-- Cursor follower script -->
+    <!-- Cursor follower -->
     <script>
       (function () {
         const cursor = document.getElementById('customCursor');
-        // Hide on touch devices
         if (window.matchMedia('(hover: none)').matches) {
           cursor.style.display = 'none';
           return;
         }
 
-        let x = window.innerWidth / 2;
-        let y = window.innerHeight / 2;
-        let tx = x;
-        let ty = y;
-        let s = 1;
-        let ts = 1;
+        let x = window.innerWidth / 2, y = window.innerHeight / 2;
+        let tx = x, ty = y;
+        let s = 1, ts = 1;
 
-        const followSpeed = 0.18;  // position easing
-        const scaleSpeed = 0.2;    // scale easing
+        const followSpeed = 0.18;
+        const scaleSpeed = 0.2;
 
         function raf() {
           x += (tx - x) * followSpeed;
@@ -261,7 +261,6 @@
         }
         raf();
 
-        // Move target on pointer move
         window.addEventListener('pointermove', (e) => {
           if (e.pointerType && e.pointerType !== 'mouse') return;
           tx = e.clientX; ty = e.clientY;
@@ -271,18 +270,16 @@
         window.addEventListener('pointerenter', () => cursor.classList.add('is-visible'));
         window.addEventListener('pointerleave', () => cursor.classList.remove('is-visible'));
 
-        // Grow on interactive elements and animated letters
         function bindHover(selector) {
           document.querySelectorAll(selector).forEach(el => {
-            el.addEventListener('pointerenter', () => { ts = 2.1; }, { passive: true });
+            el.addEventListener('pointerenter', () => { ts = 2.4; }, { passive: true }); // grow bigger on hover
             el.addEventListener('pointerleave', () => { ts = 1; }, { passive: true });
           });
         }
         bindHover('a, button, [data-cursor="hover"], .overlay-chars .char');
 
-        // Click feedback
         window.addEventListener('mousedown', () => { ts = 0.9; }, { passive: true });
-        window.addEventListener('mouseup', () => { ts = 1.4; setTimeout(() => ts = 1, 120); }, { passive: true });
+        window.addEventListener('mouseup', () => { ts = 1.5; setTimeout(() => ts = 1, 120); }, { passive: true });
       })();
     </script>
   </body>
