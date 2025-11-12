@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Assignments — Parth Khansali</title>
+
+    <!-- Tailwind + Fonts + Icons (matching index.html) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries&v=6"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8f9fa;
+      }
+      a {
+        text-decoration: none;
+      }
+      /* keep iframe responsive */
+      .embed-wrap {
+        position: relative;
+        padding-top: 56.25%;
+      }
+      .embed-wrap iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+    </style>
+  </head>
+
+  <body class="bg-white min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="p-6 border-b">
+      <nav class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <span class="material-icons bg-black text-white rounded-full p-1"
+            >code</span
+          >
+          <span class="font-medium">coded by PARTH</span>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <a class="text-gray-700 font-medium hover:underline" href="index.html"
+            >Home</a
+          >
+          <a
+            class="text-gray-700 font-medium hover:underline"
+            href="assignments.html"
+            >Assignment</a
+          >
+          <a
+            class="text-gray-700 font-medium hover:underline"
+            href="learnings.html"
+            >Learnings</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main -->
+    <main class="max-w-5xl mx-auto flex-1 w-full px-6 py-10 space-y-10">
+      <h1 class="text-4xl font-bold">📄 Assignments</h1>
+
+      <!-- Presentation Section (embedded) -->
+      <section class="bg-white p-6 rounded-lg shadow">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-semibold">Presentation</h2>
+          <div class="text-sm text-gray-500">Embedded from Google Drive</div>
+        </div>
+
+        <!-- Replace /view... with /preview for embed -->
+        <div class="embed-wrap rounded overflow-hidden border">
+          <iframe
+            src="https://drive.google.com/file/d/1FIS8injJAJU8DP64eO_F4Fqe2JejVdhU/preview"
+            allow="autoplay; encrypted-media; clipboard-write; web-share; fullscreen"
+            loading="lazy"
+            title="Presentation — Parth Khansali"
+          ></iframe>
+        </div>
+
+        <p class="mt-3 text-sm text-gray-600">
+          If you want a different presentation embedded, paste its Google Drive
+          share link below (use the "Add external PDF/Drive link" form).
+        </p>
+      </section>
+
+      <!-- Assignment Upload + External Links -->
+      <section class="bg-white p-6 rounded-lg shadow space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-semibold">Assignment</h2>
+          <div class="text-sm text-gray-500">
+            Upload PDFs or add external Drive links
+          </div>
+        </div>
+
+        <!-- Upload -->
+        <div class="flex flex-col md:flex-row md:items-center gap-3">
+          <input id="fileUpload" type="file" accept=".pdf" class="block" />
+          <button
+            id="uploadBtn"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Upload PDF
+          </button>
+        </div>
+
+        <!-- Add external link -->
+        <div class="grid md:grid-cols-3 gap-3 md:items-center">
+          <input
+            id="externalLink"
+            type="text"
+            placeholder="Paste Google Drive link or direct PDF URL"
+            class="col-span-2 border rounded p-2"
+          />
+          <button
+            id="addLinkBtn"
+            class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+          >
+            Add external PDF/Drive link
+          </button>
+        </div>
+        <p class="text-sm text-gray-500">
+          Tip: for Google Drive share links (ending with
+          <code>/view?usp=...</code>), the site will auto-convert them to an
+          embeddable preview URL.
+        </p>
+
+        <!-- Lists -->
+        <div>
+          <h3 class="font-medium mb-3">Uploaded PDFs</h3>
+          <div id="assignmentList" class="grid gap-3"></div>
+        </div>
+
+        <div>
+          <h3 class="font-medium mb-3">External PDFs / Drive Links</h3>
+          <div id="externalList" class="grid gap-3"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8 mt-auto">
+      <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div>
+          <p class="font-semibold">Want to go back?</p>
+          <a
+            href="index.html"
+            class="inline-block mt-2 bg-white text-black px-4 py-2 rounded shadow hover:opacity-90"
+            >← Back to Home</a
+          >
+        </div>
+
+        <div class="text-right text-gray-400">
+          <p>© 2024 Parth Khansali</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Script -->
+    <script>
+      // helper: convert common Google Drive share links to preview/embed link
+      function driveToPreview(url) {
+        try {
+          // already a preview
+          if (url.includes("/preview")) return url;
+          // match file/d/FILEID/...
+          const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+          if (m && m[1])
+            return `https://drive.google.com/file/d/${m[1]}/preview`;
+          // match open?id=FILEID
+          const q = new URL(url).searchParams.get("id");
+          if (q) return `https://drive.google.com/file/d/${q}/preview`;
+        } catch (e) {}
+        return url; // fallback to original
+      }
+
+      // Upload (client-side) - stored in sessionStorage for this session
+      const uploadBtn = document.getElementById("uploadBtn");
+      const fileUpload = document.getElementById("fileUpload");
+      const list = document.getElementById("assignmentList");
+
+      let uploaded = JSON.parse(sessionStorage.getItem("assignments") || "[]");
+
+      function renderUploaded() {
+        list.innerHTML = "";
+        uploaded.forEach((s, idx) => {
+          const card = document.createElement("div");
+          card.className =
+            "p-4 bg-gray-50 border rounded flex justify-between items-center";
+          card.innerHTML = `
+            <div class="truncate pr-4">
+              <div class="text-lg font-medium">${s.name}</div>
+              <div class="text-sm text-gray-500">Uploaded on: ${new Date(
+                s.time
+              ).toLocaleString()}</div>
+            </div>
+            <div class="flex gap-2 items-center">
+              <a href="${
+                s.url
+              }" target="_blank" class="text-blue-600 hover:underline">View</a>
+              <button data-idx="${idx}" class="text-sm px-3 py-1 border rounded">Remove</button>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+      }
+      renderUploaded();
+
+      uploadBtn.addEventListener("click", () => {
+        const file = fileUpload.files[0];
+        if (!file) return alert("Please select a PDF file first!");
+        if (file.type !== "application/pdf")
+          return alert("Please upload a PDF file.");
+        const fileURL = URL.createObjectURL(file);
+
+        const entry = { name: file.name, url: fileURL, time: Date.now() };
+        uploaded.push(entry);
+        sessionStorage.setItem("assignments", JSON.stringify(uploaded));
+        renderUploaded();
+        fileUpload.value = "";
+      });
+
+      // Remove uploaded
+      list.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-idx]");
+        if (!btn) return;
+        const idx = Number(btn.getAttribute("data-idx"));
+        try {
+          URL.revokeObjectURL(uploaded[idx].url);
+        } catch {}
+        uploaded.splice(idx, 1);
+        sessionStorage.setItem("assignments", JSON.stringify(uploaded));
+        renderUploaded();
+      });
+
+      // External links handling
+      const externalLink = document.getElementById("externalLink");
+      const addLinkBtn = document.getElementById("addLinkBtn");
+      const externalList = document.getElementById("externalList");
+
+      let externals = JSON.parse(sessionStorage.getItem("externals") || "[]");
+
+      function renderExternals() {
+        externalList.innerHTML = "";
+        externals.forEach((e, idx) => {
+          const card = document.createElement("div");
+          card.className =
+            "p-4 bg-gray-50 border rounded flex flex-col md:flex-row justify-between items-start md:items-center gap-3";
+          const viewLabel = e.embed ? "Preview" : "Open";
+          card.innerHTML = `
+            <div class="truncate">
+              <div class="text-lg font-medium">${e.name || e.url}</div>
+              <div class="text-sm text-gray-500">${
+                e.note || "External link"
+              }</div>
+            </div>
+            <div class="flex gap-2 items-center">
+              <a href="${
+                e.rawUrl
+              }" target="_blank" class="text-blue-600 hover:underline">${viewLabel} (new tab)</a>
+              ${
+                e.embed
+                  ? `<button data-embed="${idx}" class="text-sm px-3 py-1 border rounded">Embed below</button>`
+                  : ""
+              }
+              <button data-idx="${idx}" class="text-sm px-3 py-1 border rounded">Remove</button>
+            </div>
+          `;
+          externalList.appendChild(card);
+        });
+      }
+      renderExternals();
+
+      addLinkBtn.addEventListener("click", () => {
+        const raw = externalLink.value.trim();
+        if (!raw) return alert("Paste a Drive link or direct PDF URL first.");
+        // Try to convert drive link to preview embed if possible
+        const preview = driveToPreview(raw);
+        const isEmbedded = preview !== raw && preview.includes("/preview");
+        const name = (raw.split("/").pop() || raw).replace(/\?.*$/, "");
+        externals.push({
+          url: preview,
+          rawUrl: raw,
+          embed: isEmbedded,
+          name: name,
+          note: isEmbedded ? "Google Drive (preview available)" : "Direct link",
+        });
+        sessionStorage.setItem("externals", JSON.stringify(externals));
+        externalLink.value = "";
+        renderExternals();
+      });
+
+      // Remove or embed external
+      externalList.addEventListener("click", (e) => {
+        const rem = e.target.closest("button[data-idx]");
+        if (rem) {
+          const idx = Number(rem.getAttribute("data-idx"));
+          externals.splice(idx, 1);
+          sessionStorage.setItem("externals", JSON.stringify(externals));
+          renderExternals();
+          return;
+        }
+        const emb = e.target.closest("button[data-embed]");
+        if (emb) {
+          const idx = Number(emb.getAttribute("data-embed"));
+          // create an embedded preview block below externals
+          const previewUrl = externals[idx].url;
+          const wrapper = document.createElement("div");
+          wrapper.className = "mt-6 border rounded overflow-hidden";
+          wrapper.innerHTML = `<div class="p-3 bg-gray-100 font-medium">Embedded preview — ${externals[idx].name}</div><div class="embed-wrap"><iframe src="${previewUrl}" allow="autoplay; encrypted-media; clipboard-write; web-share; fullscreen" loading="lazy" title="External preview"></iframe></div>`;
+          externalList.parentNode.insertBefore(
+            wrapper,
+            externalList.nextSibling
+          );
+          // scroll into view
+          wrapper.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+
+      // On page load: if there are external Drive links and the user wants the new handwritten PDF shown,
+      // they can paste it into the input and click "Add external PDF/Drive link".
+      // The page will convert Drive /view links to a preview and allow embedding.
+    </script>
+  </body>
+</html>
