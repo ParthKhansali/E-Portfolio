@@ -9,28 +9,82 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries&v=6"></script>
 
     <!-- Fonts + Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
 
     <!-- Plain CSS so it always loads (no special type attr) -->
     <style>
-      body { font-family: "Inter", sans-serif; background-color: #f8f9fa; }
-      html { scroll-behavior: smooth; }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8f9fa;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
 
       /* Headings overlay (layout fixed; overlay handles hover) */
-      .explode-text { position: relative; display: inline-block; }
-      .overlay-chars { position: absolute; inset: 0; z-index: 1; pointer-events: auto; font: inherit; line-height: inherit; letter-spacing: inherit; color: currentColor; }
-      .overlay-chars .char { position: absolute; display: block; overflow: visible; }
-      .overlay-chars .char .eraser { position: absolute; inset: 0; background: var(--overlay-bg, #fff); }
-      .overlay-chars .char .glyph { position: absolute; inset: 0; display: block; color: currentColor; transform: translateY(0) scale(1); transition: transform 240ms cubic-bezier(.22,.61,.36,1), text-shadow 180ms ease; will-change: transform, text-shadow; }
-      .overlay-chars .char:hover .glyph { transform: translateY(-0.24em) scale(1.06); text-shadow: 0 6px 18px rgba(0,0,0,.08); }
-      @media (hover: none) { .overlay-chars .char:active .glyph { transform: translateY(-0.24em) scale(1.06); } }
-      @media (prefers-reduced-motion: reduce) { .overlay-chars .char .glyph { transition: none !important; } }
+      .explode-text {
+        position: relative;
+        display: inline-block;
+      }
+      .overlay-chars {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: auto;
+        font: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+        color: currentColor;
+      }
+      .overlay-chars .char {
+        position: absolute;
+        display: block;
+        overflow: visible;
+      }
+      .overlay-chars .char .eraser {
+        position: absolute;
+        inset: 0;
+        background: var(--overlay-bg, #fff);
+      }
+      .overlay-chars .char .glyph {
+        position: absolute;
+        inset: 0;
+        display: block;
+        color: currentColor;
+        transform: translateY(0) scale(1);
+        transition: transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1),
+          text-shadow 180ms ease;
+        will-change: transform, text-shadow;
+      }
+      .overlay-chars .char:hover .glyph {
+        transform: translateY(-0.24em) scale(1.06);
+        text-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      }
+      @media (hover: none) {
+        .overlay-chars .char:active .glyph {
+          transform: translateY(-0.24em) scale(1.06);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .overlay-chars .char .glyph {
+          transition: none !important;
+        }
+      }
 
       /* Bigger custom cursor */
       .custom-cursor {
-        position: fixed; left: 0; top: 0;
-        width: 32px; height: 32px;             /* larger base size */
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 32px;
+        height: 32px; /* larger base size */
         border-radius: 9999px;
         background: #fff;
         mix-blend-mode: difference;
@@ -41,8 +95,15 @@
         transition: opacity 200ms ease;
         will-change: transform, opacity;
       }
-      .custom-cursor.is-visible { opacity: 1; }
-      @media (min-width: 768px) { .custom-cursor { width: 40px; height: 40px; } }
+      .custom-cursor.is-visible {
+        opacity: 1;
+      }
+      @media (min-width: 768px) {
+        .custom-cursor {
+          width: 40px;
+          height: 40px;
+        }
+      }
     </style>
   </head>
 
@@ -51,15 +112,30 @@
       <header class="p-8">
         <nav class="flex justify-between items-center">
           <div class="flex items-center space-x-2">
-            <span class="material-icons bg-black text-white rounded-full p-1">code</span>
+            <span class="material-icons bg-black text-white rounded-full p-1"
+              >code</span
+            >
             <span class="font-medium">coded by PARTH</span>
           </div>
+
+          <!-- Updated Navbar: Assignment & Learnings -->
           <div class="hidden md:flex space-x-12">
-            <div class="text-center"><a class="text-gray-800 font-medium" href="#">About</a></div>
-            <div class="text-center"><a class="text-gray-800 font-medium" href="#">Projects</a></div>
-            <div class="text-center"><a class="text-gray-800 font-medium" href="#">Gallery</a></div>
-            <div class="text-center"><a class="text-gray-800 font-medium" href="#">Blog</a></div>
+            <div class="text-center">
+              <a
+                class="text-gray-800 font-medium hover:underline"
+                href="assignments.html"
+                >Assignment</a
+              >
+            </div>
+            <div class="text-center">
+              <a
+                class="text-gray-800 font-medium hover:underline"
+                href="learnings.html"
+                >Learnings</a
+              >
+            </div>
           </div>
+
           <a class="flex items-center space-x-1 font-medium" href="#contact">
             <span>Contact</span>
             <span class="material-icons">arrow_outward</span>
@@ -70,23 +146,48 @@
       <!-- Hero: left-aligned, vertically centered -->
       <main class="flex-grow flex items-center justify-start px-0">
         <div class="text-left mr-auto w-full pl-4 md:pl-6">
-          <h1 class="explode-text font-bold text-black relative leading-[0.95] text-[clamp(3rem,12vw,9.5rem)]">Creativity is</h1>
-          <h1 class="explode-text font-bold text-black mt-4 leading-[0.95] text-[clamp(3rem,12vw,9.5rem)]">my craft</h1>
+          <h1
+            class="explode-text font-bold text-black relative leading-[0.95] text-[clamp(3rem,12vw,9.5rem)]"
+          >
+            Creativity is
+          </h1>
+          <h1
+            class="explode-text font-bold text-black mt-4 leading-[0.95] text-[clamp(3rem,12vw,9.5rem)]"
+          >
+            my craft
+          </h1>
         </div>
       </main>
 
       <!-- Footer -->
       <footer class="p-8 flex items-center justify-between">
         <!-- Self intro video hint -->
-        <a href="#video" class="flex items-center gap-2 text-gray-700 hover:text-gray-900" title="Jump to the self intro video">
+        <a
+          href="#video"
+          class="flex items-center gap-2 text-gray-700 hover:text-gray-900"
+          title="Jump to the self intro video"
+        >
           <span class="material-icons text-4xl md:text-5xl">play_circle</span>
-          <span class="uppercase tracking-wide font-semibold text-base md:text-lg">Self intro video</span>
+          <span
+            class="uppercase tracking-wide font-semibold text-base md:text-lg"
+            >Self intro video</span
+          >
           <span class="hidden sm:inline text-gray-500">— below</span>
         </a>
         <!-- Scroll CTA -->
-        <a class="group flex items-center gap-4 text-gray-900" href="#video" aria-label="Scroll to video">
-          <span class="text-3xl md:text-4xl font-black tracking-tight">Scroll to watch</span>
-          <span class="material-icons text-5xl md:text-6xl motion-safe:animate-bounce" aria-hidden="true">keyboard_double_arrow_down</span>
+        <a
+          class="group flex items-center gap-4 text-gray-900"
+          href="#video"
+          aria-label="Scroll to video"
+        >
+          <span class="text-3xl md:text-4xl font-black tracking-tight"
+            >Scroll to watch</span
+          >
+          <span
+            class="material-icons text-5xl md:text-6xl motion-safe:animate-bounce"
+            aria-hidden="true"
+            >keyboard_double_arrow_down</span
+          >
         </a>
       </footer>
     </div>
@@ -123,7 +224,11 @@
             <div class="space-y-6">
               <div class="flex items-center space-x-4">
                 <span class="material-icons text-blue-500">email</span>
-                <a class="text-lg hover:underline" href="mailto:parthkhansali@gmail.com">parthkhansali@gmail.com</a>
+                <a
+                  class="text-lg hover:underline"
+                  href="mailto:parthkhansali@gmail.com"
+                  >parthkhansali@gmail.com</a
+                >
               </div>
               <div class="flex items-center space-x-4">
                 <span class="material-icons text-blue-500">phone</span>
@@ -136,15 +241,27 @@
             </div>
           </div>
           <div class="flex flex-col space-y-4">
-            <a class="flex items-center justify-between p-4 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors" href="#">
+            <a
+              class="flex items-center justify-between p-4 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+              href="https://www.linkedin.com/in/parth-khansali-b2a467228"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span class="text-xl font-medium">LinkedIn</span>
               <span class="material-icons">arrow_outward</span>
             </a>
-            <a class="flex items-center justify-between p-4 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors" href="#">
+
+            <a
+              class="flex items-center justify-between p-4 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+              href="#"
+            >
               <span class="text-xl font-medium">GitHub</span>
               <span class="material-icons">arrow_outward</span>
             </a>
-            <a class="flex items-center justify-between p-4 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors" href="#">
+            <a
+              class="flex items-center justify-between p-4 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+              href="#"
+            >
               <span class="text-xl font-medium">Twitter</span>
               <span class="material-icons">arrow_outward</span>
             </a>
@@ -165,24 +282,26 @@
         let e = el;
         while (e) {
           const c = getComputedStyle(e).backgroundColor;
-          if (c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent') return c;
+          if (c && c !== "rgba(0, 0, 0, 0)" && c !== "transparent") return c;
           e = e.parentElement;
         }
-        return '#fff';
+        return "#fff";
       }
 
       function setupOverlay(el) {
-        const textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
+        const textNode = Array.from(el.childNodes).find(
+          (n) => n.nodeType === Node.TEXT_NODE
+        );
         if (!textNode) return;
 
-        const overlay = document.createElement('span');
-        overlay.className = 'overlay-chars';
-        overlay.setAttribute('aria-hidden', 'true');
-        overlay.style.setProperty('--overlay-bg', getEffectiveBg(el));
+        const overlay = document.createElement("span");
+        overlay.className = "overlay-chars";
+        overlay.setAttribute("aria-hidden", "true");
+        overlay.style.setProperty("--overlay-bg", getEffectiveBg(el));
         el.appendChild(overlay);
 
         const render = () => {
-          overlay.innerHTML = '';
+          overlay.innerHTML = "";
           const elRect = el.getBoundingClientRect();
           const text = textNode.textContent;
           const len = text.length;
@@ -198,20 +317,20 @@
             const r = rects[0];
             if (r.width === 0 || r.height === 0) continue;
 
-            const wrap = document.createElement('span');
-            wrap.className = 'char';
-            wrap.style.left = (r.left - elRect.left) + 'px';
-            wrap.style.top = (r.top - elRect.top) + 'px';
-            wrap.style.width = r.width + 'px';
-            wrap.style.height = r.height + 'px';
-            wrap.style.lineHeight = r.height + 'px';
+            const wrap = document.createElement("span");
+            wrap.className = "char";
+            wrap.style.left = r.left - elRect.left + "px";
+            wrap.style.top = r.top - elRect.top + "px";
+            wrap.style.width = r.width + "px";
+            wrap.style.height = r.height + "px";
+            wrap.style.lineHeight = r.height + "px";
 
-            const eraser = document.createElement('span');
-            eraser.className = 'eraser';
+            const eraser = document.createElement("span");
+            eraser.className = "eraser";
             wrap.appendChild(eraser);
 
-            const glyph = document.createElement('span');
-            glyph.className = 'glyph';
+            const glyph = document.createElement("span");
+            glyph.className = "glyph";
             glyph.textContent = text[i];
             wrap.appendChild(glyph);
 
@@ -222,32 +341,35 @@
         if (document.fonts && document.fonts.ready) {
           document.fonts.ready.then(render).catch(render);
         } else {
-          window.addEventListener('load', render, { once: true });
+          window.addEventListener("load", render, { once: true });
         }
-        window.addEventListener('resize', render);
-        if ('ResizeObserver' in window) {
+        window.addEventListener("resize", render);
+        if ("ResizeObserver" in window) {
           const ro = new ResizeObserver(render);
           ro.observe(el);
         }
       }
 
-      document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.explode-text').forEach(setupOverlay);
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".explode-text").forEach(setupOverlay);
       });
     </script>
 
     <!-- Cursor follower -->
     <script>
       (function () {
-        const cursor = document.getElementById('customCursor');
-        if (window.matchMedia('(hover: none)').matches) {
-          cursor.style.display = 'none';
+        const cursor = document.getElementById("customCursor");
+        if (window.matchMedia("(hover: none)").matches) {
+          cursor.style.display = "none";
           return;
         }
 
-        let x = window.innerWidth / 2, y = window.innerHeight / 2;
-        let tx = x, ty = y;
-        let s = 1, ts = 1;
+        let x = window.innerWidth / 2,
+          y = window.innerHeight / 2;
+        let tx = x,
+          ty = y;
+        let s = 1,
+          ts = 1;
 
         const followSpeed = 0.18;
         const scaleSpeed = 0.2;
@@ -261,25 +383,59 @@
         }
         raf();
 
-        window.addEventListener('pointermove', (e) => {
-          if (e.pointerType && e.pointerType !== 'mouse') return;
-          tx = e.clientX; ty = e.clientY;
-          cursor.classList.add('is-visible');
-        }, { passive: true });
+        window.addEventListener(
+          "pointermove",
+          (e) => {
+            if (e.pointerType && e.pointerType !== "mouse") return;
+            tx = e.clientX;
+            ty = e.clientY;
+            cursor.classList.add("is-visible");
+          },
+          { passive: true }
+        );
 
-        window.addEventListener('pointerenter', () => cursor.classList.add('is-visible'));
-        window.addEventListener('pointerleave', () => cursor.classList.remove('is-visible'));
+        window.addEventListener("pointerenter", () =>
+          cursor.classList.add("is-visible")
+        );
+        window.addEventListener("pointerleave", () =>
+          cursor.classList.remove("is-visible")
+        );
 
         function bindHover(selector) {
-          document.querySelectorAll(selector).forEach(el => {
-            el.addEventListener('pointerenter', () => { ts = 2.4; }, { passive: true }); // grow bigger on hover
-            el.addEventListener('pointerleave', () => { ts = 1; }, { passive: true });
+          document.querySelectorAll(selector).forEach((el) => {
+            el.addEventListener(
+              "pointerenter",
+              () => {
+                ts = 2.4;
+              },
+              { passive: true }
+            ); // grow bigger on hover
+            el.addEventListener(
+              "pointerleave",
+              () => {
+                ts = 1;
+              },
+              { passive: true }
+            );
           });
         }
         bindHover('a, button, [data-cursor="hover"], .overlay-chars .char');
 
-        window.addEventListener('mousedown', () => { ts = 0.9; }, { passive: true });
-        window.addEventListener('mouseup', () => { ts = 1.5; setTimeout(() => ts = 1, 120); }, { passive: true });
+        window.addEventListener(
+          "mousedown",
+          () => {
+            ts = 0.9;
+          },
+          { passive: true }
+        );
+        window.addEventListener(
+          "mouseup",
+          () => {
+            ts = 1.5;
+            setTimeout(() => (ts = 1), 120);
+          },
+          { passive: true }
+        );
       })();
     </script>
   </body>
