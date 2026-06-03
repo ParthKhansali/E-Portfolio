@@ -32,14 +32,15 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          static_site_generator: next
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build with Next.js
-        run: npm run build
+        run: |
+          npm run build
+          ls -la
+          if [ -d "out" ]; then echo "out directory exists"; else echo "out directory DOES NOT exist"; exit 1; fi
         env:
           BASE_PATH: '/E-Portfolio'
 
