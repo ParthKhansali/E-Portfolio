@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 
 interface GlowCardProps {
@@ -15,40 +15,46 @@ export default function GlowCard({
   glowColor = "67, 97, 238",
 }: GlowCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
   };
 
   return (
     <motion.div
       ref={cardRef}
-      className={`relative overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0e0e0e] ${className}`}
+      className={`group/glow relative overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0e0e0e] ${className}`}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       data-cursor="card"
       whileHover={{ y: -4 }}
-      transition={{ duration: 0.3 }}
-      style={{
-        background: isHovered
-          ? `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(${glowColor}, 0.04), transparent 40%), #0e0e0e`
-          : "#0e0e0e",
-      }}
+      transition={{ duration: 0.25 }}
+      style={
+        {
+          "--glow-color": glowColor,
+          "--mouse-x": "-999px",
+          "--mouse-y": "-999px",
+        } as React.CSSProperties
+      }
     >
-      {/* Glow border overlay */}
+      {/* Background radial glow */}
       <div
-        className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-500"
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover/glow:opacity-100 transition-opacity duration-300"
         style={{
-          opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(${glowColor}, 0.15), transparent 40%)`,
+          background:
+            "radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), rgba(var(--glow-color), 0.05), transparent 60%)",
+        }}
+      />
+
+      {/* Border glow overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/glow:opacity-100 transition-opacity duration-300"
+        style={{
+          background:
+            "radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), rgba(var(--glow-color), 0.25), transparent 50%)",
           mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           maskComposite: "exclude",
           WebkitMaskComposite: "xor",

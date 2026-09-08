@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ExternalLink, Code2 } from "lucide-react";
-import { projects, type Project } from "@/data/projects";
+import { projects } from "@/data/projects";
 import GlowCard from "@/components/GlowCard";
 import RevealText from "@/components/RevealText";
 
@@ -38,26 +38,25 @@ export default function ProjectsPage() {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-4 block text-xs uppercase tracking-[0.3em] text-[#4361ee]"
+          className="mb-4 block text-xs uppercase tracking-[0.25em] font-semibold text-[#4361ee]"
         >
-          Projects
+          THINGS I&apos;VE BUILT
         </motion.span>
 
         <RevealText
           mode="word"
-          className="mb-6 max-w-2xl font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.1] tracking-tight text-white"
+          className="mb-4 max-w-3xl font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.1] tracking-tight text-white"
         >
-          Everything I&apos;ve built and shipped.
+          A few ideas that escaped the notes app
         </RevealText>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-12 max-w-lg text-base text-[#888]"
+          className="mb-12 max-w-2xl text-xs sm:text-sm leading-relaxed text-[#888] md:text-base"
         >
-          A collection of projects across machine learning, web development,
-          tooling, and design systems.
+          Some started as college projects. Some started as &ldquo;wait, why doesn&apos;t this exist?&rdquo; Either way, I like building them far enough to find the interesting problems.
         </motion.p>
 
         {/* Filter bar */}
@@ -126,21 +125,33 @@ export default function ProjectsPage() {
                     </div>
                   </div>
 
-                  {/* Category badge */}
-                  <span
-                    className="mb-3 inline-block w-fit rounded-full border px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest"
-                    style={{
-                      borderColor: `${categoryColors[project.category]}40`,
-                      color: categoryColors[project.category],
-                    }}
-                  >
-                    {project.category}
-                  </span>
+                  {/* Category & Status badge */}
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <span
+                      className="inline-block w-fit rounded-full border px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest"
+                      style={{
+                        borderColor: `${categoryColors[project.category]}40`,
+                        color: categoryColors[project.category],
+                      }}
+                    >
+                      {project.category}
+                    </span>
+                    {project.status && (
+                      <span className="rounded-full border border-[#06d6a0]/30 bg-[#06d6a0]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#06d6a0]">
+                        {project.status}
+                      </span>
+                    )}
+                  </div>
 
-                  <h3 className="mb-2 text-lg font-semibold text-white">
+                  <h3 className="mb-1 text-lg font-semibold text-white">
                     {project.title}
                   </h3>
-                  <p className="mb-4 flex-1 text-sm leading-relaxed text-[#777]">
+                  {project.subtitle && (
+                    <p className="mb-2 text-xs font-medium text-[#c77dff]">
+                      {project.subtitle}
+                    </p>
+                  )}
+                  <p className="mb-4 flex-1 text-xs sm:text-sm leading-relaxed text-[#777] whitespace-pre-line">
                     {project.description}
                   </p>
 

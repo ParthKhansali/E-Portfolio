@@ -72,19 +72,6 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* ========== Grain Overlay ========== */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 128px 128px;
-}
-
 /* ========== Scrollbar ========== */
 ::-webkit-scrollbar {
   width: 6px;
@@ -125,72 +112,63 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  width: 8px;
-  height: 8px;
-  background: #fff;
+  width: 7px;
+  height: 7px;
+  background: #ffffff;
   border-radius: 50%;
-  clip-path: circle(50%);
-  -webkit-clip-path: circle(50%);
   pointer-events: none;
-  z-index: 99999;
-  mix-blend-mode: difference;
-  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-    height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-    background 0.3s ease;
-  transform: translate(-50%, -50%) translateZ(0);
-  will-change: left, top, transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  z-index: 100002;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(67, 97, 238, 0.5);
+  transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+    height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+    background 0.2s ease;
+  will-change: transform;
 }
 
 .cursor-ring {
   position: fixed;
   top: 0;
   left: 0;
-  width: 40px;
-  height: 40px;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
   border-radius: 50%;
-  clip-path: circle(50%);
-  -webkit-clip-path: circle(50%);
   pointer-events: none;
-  z-index: 99998;
-  mix-blend-mode: difference;
-  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-    height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-    border-color 0.3s ease,
-    background 0.3s ease,
-    opacity 0.3s ease;
-  transform: translate(-50%, -50%) translateZ(0);
-  will-change: left, top, transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  z-index: 100001;
+  box-shadow: 0 0 15px rgba(67, 97, 238, 0.2);
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 0.25s ease,
+    background 0.25s ease,
+    opacity 0.25s ease;
+  will-change: transform;
 }
 
 /* Cursor states */
 .cursor-hover .cursor-ring {
-  width: 60px;
-  height: 60px;
-  border-color: rgba(67, 97, 238, 0.6);
-  background: rgba(67, 97, 238, 0.05);
+  width: 52px;
+  height: 52px;
+  border-color: rgba(67, 97, 238, 0.8);
+  background: rgba(67, 97, 238, 0.08);
 }
 
 .cursor-hover .cursor-dot {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
+  background: #4361ee;
 }
 
 .cursor-text .cursor-ring {
-  opacity: 0;
-  width: 20px;
-  height: 20px;
+  opacity: 0.2;
+  width: 22px;
+  height: 22px;
 }
 
 .cursor-card .cursor-ring {
-  width: 80px;
-  height: 80px;
-  border-color: rgba(67, 97, 238, 0.3);
-  background: rgba(67, 97, 238, 0.03);
+  width: 68px;
+  height: 68px;
+  border-color: rgba(67, 97, 238, 0.5);
+  background: rgba(67, 97, 238, 0.04);
 }
 
 .cursor-card .cursor-dot {
@@ -322,3 +300,178 @@ body::before {
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* ========== Word Reveal ========== */
+.word-reveal {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  animation: wordReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes wordReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== Infinite Portal Marquee ========== */
+@keyframes portal-scroll-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes portal-scroll-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.portal-track-left {
+  display: flex !important;
+  width: max-content !important;
+  flex-shrink: 0 !important;
+  animation: portal-scroll-left 28s linear infinite !important;
+  will-change: transform;
+}
+
+.portal-track-right {
+  display: flex !important;
+  width: max-content !important;
+  flex-shrink: 0 !important;
+  animation: portal-scroll-right 28s linear infinite !important;
+  will-change: transform;
+}
+
+
+/* ========== Breathing Card Oscillation ========== */
+@keyframes breathing {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.008);
+  }
+}
+
+.animate-breathing-0 {
+  animation: breathing 5s ease-in-out infinite;
+}
+
+.animate-breathing-1 {
+  animation: breathing 5.5s ease-in-out infinite 0.6s;
+}
+
+.animate-breathing-2 {
+  animation: breathing 6s ease-in-out infinite 1.2s;
+}
+
+/* ========== Tactile Slide-Fill Button ========== */
+.btn-tactile {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+
+.btn-tactile .btn-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent-blue);
+  transform: translateX(-101%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.btn-tactile:hover .btn-fill {
+  transform: translateX(0);
+}
+
+.btn-tactile:hover {
+  color: #fff;
+}
+
+.btn-tactile .btn-content {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-tactile .btn-icon {
+  transition: transform 0.3s ease;
+}
+
+.btn-tactile:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+/* ========== Audio Equalizer Bars ========== */
+@keyframes eq-bounce-1 {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+
+@keyframes eq-bounce-2 {
+  0%, 100% { height: 14px; }
+  50% { height: 6px; }
+}
+
+@keyframes eq-bounce-3 {
+  0%, 100% { height: 8px; }
+  50% { height: 18px; }
+}
+
+.eq-bar-1 { animation: eq-bounce-1 0.8s ease-in-out infinite; }
+.eq-bar-2 { animation: eq-bounce-2 0.7s ease-in-out infinite; }
+.eq-bar-3 { animation: eq-bounce-3 0.9s ease-in-out infinite; }
+
+/* ========== Puppy Assistant Animations ========== */
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(24deg);
+  }
+}
+
+@keyframes float-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(1.3);
+  }
+}
+
+/* ========== Minecraft Enchanting Table Language (SGA) Particles ========== */
+@keyframes sga-float {
+  0% {
+    opacity: 0;
+    transform: translateY(0px) rotate(0deg) scale(0.85);
+  }
+  20% {
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateY(-35px) rotate(12deg) scale(1.05);
+    opacity: 0.75;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-75px) rotate(24deg) scale(0.9);
+  }
+}
+
+
