@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, FolderGit2, Code2, Briefcase, Download, Mail } from "lucide-react";
 import { InstagramIcon } from "@/components/icons/SocialIcons";
+import { asset } from "@/lib/basepath";
 
 interface SearchItem {
   id: string;
@@ -103,7 +104,7 @@ const items: SearchItem[] = [
     category: "Actions",
     description: "Download Parth Khansali's latest curriculum vitae",
     icon: Download,
-    target: "/parth_resume.pdf",
+    target: asset("/parth_resume.pdf"),
     type: "action",
   },
   {

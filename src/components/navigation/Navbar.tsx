@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Search, Cat, Download, Menu, X } from "lucide-react";
+import { asset } from "@/lib/basepath";
 
 const navLinks = [
   { label: "Projects", id: "projects" },
@@ -68,7 +69,7 @@ export default function Navbar() {
             <div className="relative">
               <div className="h-8 w-8 overflow-hidden rounded-full border border-white/20 bg-[#0c0c0e] shadow-md transition-transform duration-300 group-hover:scale-105">
                 <Image
-                  src="/profile.jpg"
+                  src={asset("/profile.jpg")}
                   alt="Parth Khansali"
                   width={32}
                   height={32}

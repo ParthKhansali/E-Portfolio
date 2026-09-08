@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getVisitorLocation } from "@/lib/geo";
+import { asset } from "@/lib/basepath";
 
 // Canonical Oneko 32x32 sprite coordinate map: [col, row]
 // Multiplied by -32px for CSS background-position
@@ -399,7 +400,7 @@ export default function CursorAssistant() {
           ref={spriteRef}
           className="h-8 w-8 pointer-events-none"
           style={{
-            backgroundImage: "url('/oneko.gif')",
+            backgroundImage: `url('${asset("/oneko.gif")}')`,
             backgroundPosition: "-96px -96px",
             imageRendering: "pixelated",
           }}

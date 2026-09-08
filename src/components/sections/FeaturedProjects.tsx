@@ -8,6 +8,7 @@ import { GithubIcon } from "@/components/icons/SocialIcons";
 import { projects, Project } from "@/data/projects";
 import GlowCard from "../GlowCard";
 import EnchantingParticles, { SgaRune } from "@/components/effects/EnchantingParticles";
+import { asset } from "@/lib/basepath";
 
 export default function FeaturedProjects() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -93,7 +94,7 @@ export default function FeaturedProjects() {
             {/* Enchanting Table Sprite */}
             <div className="relative h-10 w-10 sm:h-11 sm:w-11 flex-shrink-0 overflow-hidden rounded-xl bg-black/40 p-1 border border-[#c77dff]/40 shadow-[0_0_20px_rgba(199,125,255,0.45)]">
               <Image
-                src="/enchanting-table.jpg"
+                src={asset("/enchanting-table.jpg")}
                 alt="Enchanting Table"
                 width={88}
                 height={88}

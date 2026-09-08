@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { asset } from "@/lib/basepath";
 import { Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/icons/SocialIcons";
 
@@ -40,7 +41,7 @@ export default function ClosingCTA() {
         className="pointer-events-none absolute inset-x-0 -top-24 h-[160%] w-full z-0 opacity-40"
       >
         <Image
-          src="/voxel-night-sky.png"
+          src={asset("/voxel-night-sky.png")}
           alt="Voxel Night Sky Landscape"
           fill
           className="object-cover object-center"
@@ -57,7 +58,7 @@ export default function ClosingCTA() {
         {/* Mascot Perched Directly on the Card */}
         <div className="relative mx-auto -mb-10 w-28 sm:w-36 z-20 transition-transform duration-500 hover:scale-110">
           <Image
-            src="/llama-nobg.png"
+            src={asset("/llama-nobg.png")}
             alt="Voxel Llama Mascot"
             width={240}
             height={240}

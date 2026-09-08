@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { asset } from "@/lib/basepath";
 
 // Row 1: Languages & Build tools (traverses Left -> Right through portals)
 const row1Tools = [
@@ -74,7 +75,7 @@ export default function PortalMarquee() {
         <div className="pointer-events-none absolute -left-4 sm:left-2 md:left-6 top-1/2 -translate-y-1/2 z-5 w-36 sm:w-48 md:w-56 drop-shadow-[0_0_35px_rgba(199,125,255,0.8)]">
           <div className="relative w-full [clip-path:inset(0_0_4%_0)]">
             <Image
-              src="/nether-portal-vortex.png"
+              src={asset("/nether-portal-vortex.png")}
               alt="Nether Portal Left Vortex"
               width={300}
               height={300}
@@ -89,7 +90,7 @@ export default function PortalMarquee() {
         <div className="pointer-events-none absolute -right-4 sm:right-2 md:right-6 top-1/2 -translate-y-1/2 z-5 w-36 sm:w-48 md:w-56 scale-x-[-1] drop-shadow-[0_0_35px_rgba(199,125,255,0.8)]">
           <div className="relative w-full [clip-path:inset(0_0_4%_0)]">
             <Image
-              src="/nether-portal-vortex.png"
+              src={asset("/nether-portal-vortex.png")}
               alt="Nether Portal Right Vortex"
               width={300}
               height={300}
@@ -147,7 +148,7 @@ export default function PortalMarquee() {
         <div className="pointer-events-none absolute -left-4 sm:left-2 md:left-6 top-1/2 -translate-y-1/2 z-25 w-36 sm:w-48 md:w-56 drop-shadow-[0_0_40px_rgba(114,9,183,0.7)]">
           <div className="relative w-full [clip-path:inset(0_0_4%_0)]">
             <Image
-              src="/nether-portal-frame.png"
+              src={asset("/nether-portal-frame.png")}
               alt="Nether Portal Left Obsidian Frame"
               width={300}
               height={300}
@@ -163,7 +164,7 @@ export default function PortalMarquee() {
         <div className="pointer-events-none absolute -right-4 sm:right-2 md:right-6 top-1/2 -translate-y-1/2 z-25 w-36 sm:w-48 md:w-56 scale-x-[-1] drop-shadow-[0_0_40px_rgba(114,9,183,0.7)]">
           <div className="relative w-full [clip-path:inset(0_0_4%_0)]">
             <Image
-              src="/nether-portal-frame.png"
+              src={asset("/nether-portal-frame.png")}
               alt="Nether Portal Right Obsidian Frame"
               width={300}
               height={300}

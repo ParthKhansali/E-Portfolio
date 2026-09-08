@@ -6,8 +6,11 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // If hosted on a subpath (e.g. username.github.io/repo), set BASE_PATH=/repo during build
+  // If hosted on a subpath (e.g. username.github.io/E-Portfolio), set:
+  //   BASE_PATH=/E-Portfolio             (used by Next.js router & link prefixing)
+  //   NEXT_PUBLIC_BASE_PATH=/E-Portfolio (used by src/lib/basepath.ts for raw hrefs)
   basePath: process.env.BASE_PATH || "",
+  assetPrefix: process.env.BASE_PATH || "",
 };
 
 export default nextConfig;

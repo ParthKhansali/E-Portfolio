@@ -13,6 +13,7 @@ import {
   FileText,
 } from "lucide-react";
 import RevealText from "@/components/RevealText";
+import { asset } from "@/lib/basepath";
 
 const education = [
   {
@@ -244,7 +245,7 @@ export default function ResumePage() {
 
             {/* Direct Download Button */}
             <a
-              href="/parth_resume.pdf"
+              href={asset("/parth_resume.pdf")}
               download="Parth_Khansali_Resume.pdf"
               className="inline-flex items-center gap-2 rounded-full bg-[#4361ee] px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-[0_0_25px_rgba(67,97,238,0.4)] transition-all duration-300 hover:bg-[#3451d1] hover:scale-105 active:scale-95"
             >
@@ -263,7 +264,7 @@ export default function ResumePage() {
                 Viewing official 2-page PDF
               </span>
               <a
-                href="/parth_resume.pdf"
+                href={asset("/parth_resume.pdf")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-[#4361ee] hover:underline"
@@ -274,7 +275,7 @@ export default function ResumePage() {
             </div>
             <div className="rounded-2xl border border-white/10 bg-[#111114] p-2 shadow-2xl overflow-hidden">
               <iframe
-                src="/parth_resume.pdf#toolbar=0&navpanes=0"
+                src={asset("/parth_resume.pdf#toolbar=0&navpanes=0")}
                 className="w-full h-[85vh] rounded-xl border-0 bg-white"
                 title="Parth Khansali Resume PDF"
               />

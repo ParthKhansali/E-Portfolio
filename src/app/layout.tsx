@@ -10,6 +10,7 @@ import ScrollProgress from "@/components/effects/ScrollProgress";
 import CursorAssistant from "@/components/assistant/CursorAssistant";
 import CommandPalette from "@/components/navigation/CommandPalette";
 import ResumeModal from "@/components/resume/ResumeModal";
+import { asset } from "@/lib/basepath";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -87,8 +88,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
+    icon: asset("/icon.png"),
+    apple: asset("/icon.png"),
   },
 };
 

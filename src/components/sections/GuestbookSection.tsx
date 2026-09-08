@@ -14,6 +14,7 @@ import {
 } from "@/lib/guestbook";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { asset } from "@/lib/basepath";
 
 export default function GuestbookSection() {
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
@@ -247,7 +248,7 @@ export default function GuestbookSection() {
                 <div className="flex items-center gap-2">
                   <div className="relative h-6 w-6 rounded-full overflow-hidden border border-white/10 bg-white/[0.05]">
                     <Image
-                      src={googleUser.picture || "/profile.jpg"}
+                      src={googleUser.picture || asset("/profile.jpg")}
                       alt={googleUser.name}
                       width={24}
                       height={24}

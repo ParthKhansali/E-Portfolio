@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Download, ExternalLink, X, FileText } from "lucide-react";
+import { asset } from "@/lib/basepath";
 
 export default function ResumeModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +88,7 @@ export default function ResumeModal() {
           <div className="flex items-center gap-2 sm:gap-2.5">
             {/* Open in New Tab */}
             <a
-              href="/parth_resume.pdf"
+              href={asset("/parth_resume.pdf")}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.05] hover:bg-white/[0.1] hover:text-white px-3.5 py-1.5 text-xs font-medium text-neutral-300 transition-colors"
@@ -99,7 +100,7 @@ export default function ResumeModal() {
 
             {/* Primary Download Button */}
             <a
-              href="/parth_resume.pdf"
+              href={asset("/parth_resume.pdf")}
               download="Parth_Khansali_Resume.pdf"
               className="inline-flex items-center gap-2 rounded-full bg-[#4361ee] hover:bg-[#3451d1] px-4 sm:px-5 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(67,97,238,0.4)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
             >
@@ -122,7 +123,7 @@ export default function ResumeModal() {
         {/* Embedded PDF Viewer with Canvas Backdrop */}
         <div className="relative flex-1 w-full bg-[#18181e] p-2 sm:p-4 overflow-hidden flex items-center justify-center">
           <iframe
-            src="/parth_resume.pdf#view=FitH"
+            src={asset("/parth_resume.pdf#view=FitH")}
             className="w-full h-full max-w-4xl rounded-xl border border-black/40 shadow-2xl bg-white"
             title="Parth Khansali Resume Preview"
           />
@@ -132,7 +133,7 @@ export default function ResumeModal() {
         <div className="flex sm:hidden items-center justify-between px-4 py-2.5 bg-[#14141a] border-t border-white/[0.08] text-xs text-neutral-400">
           <span>Viewing Parth&apos;s Resume</span>
           <a
-            href="/parth_resume.pdf"
+            href={asset("/parth_resume.pdf")}
             download="Parth_Khansali_Resume.pdf"
             className="text-[#4361ee] font-semibold underline"
           >
