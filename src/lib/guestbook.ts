@@ -58,6 +58,9 @@ export async function signInWithGoogle(): Promise<{ user?: GoogleUser; error?: s
     if (error.code === "auth/configuration-not-found" || error.code === "auth/operation-not-allowed") {
       return { error: "Please enable Google Sign-In in your Firebase Console (Authentication > Sign-in method)." };
     }
+    if (error.code === "auth/unauthorized-domain") {
+      return { error: "This domain is not authorized in Firebase Console. Add your Vercel domain under Authentication > Settings > Authorized domains." };
+    }
     return { error: error.message || "Failed to sign in with Google." };
   }
 }
