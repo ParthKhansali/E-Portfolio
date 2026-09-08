@@ -31,8 +31,8 @@ export default function Hero() {
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-16"
     >
       {/* Ambient background glow orbs */}
-      <div className="pointer-events-none absolute left-1/4 top-1/4 h-[500px] w-[500px] rounded-full bg-[#4361ee]/[0.03] blur-[140px]" />
-      <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-[400px] w-[400px] rounded-full bg-[#7209b7]/[0.03] blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/4 top-1/4 h-[500px] w-[500px] rounded-full bg-white/[0.015] blur-[140px]" />
+      <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-[400px] w-[400px] rounded-full bg-white/[0.015] blur-[120px]" />
 
       <div className="relative z-10 flex max-w-4xl flex-col items-center text-center">
         {/* Availability Status Badge */}
@@ -51,34 +51,48 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Name Title */}
+        {/* Name Title - Clean, crisp, high-contrast typography matching the site theme */}
         <motion.h1
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="font-display text-[clamp(2.75rem,8vw,5.75rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-white"
+          className="my-3 font-display text-[clamp(2.75rem,8.5vw,5.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] select-none text-white"
         >
-          PARTH <span className="text-gradient">KHANSALI</span>
+          PARTH{" "}
+          <span className="bg-gradient-to-b from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+            KHANSALI
+          </span>
         </motion.h1>
 
-        {/* Dynamic Role Ticker */}
-        <div className="mt-3 mb-4 flex items-center justify-center gap-2 text-base md:text-lg text-[#777]">
-          <span>Role:</span>
-          <div className="relative h-[1.6em] min-w-[160px] overflow-hidden flex items-center justify-center">
-            <AnimatePresence mode="wait">
+        {/* Dynamic Role Ticker - Unified Tactile Pill with Exact Fixed Spacing & Fluid Spring Layout */}
+        <motion.div
+          layout
+          transition={{ layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+          className="mt-2 mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-1.5 shadow-[0_2px_15px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all hover:border-white/20"
+        >
+          <span className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
+            </span>
+            Role
+          </span>
+          <span className="h-3 w-[1px] bg-white/15 select-none" />
+          <div className="relative h-[1.4em] overflow-hidden flex items-center">
+            <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
                 key={currentItem.role}
-                initial={{ y: 16, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -16, opacity: 0 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute font-semibold text-[#4361ee]"
+                initial={{ y: 14, opacity: 0, filter: "blur(4px)" }}
+                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                exit={{ y: -14, opacity: 0, filter: "blur(4px)" }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                className="whitespace-nowrap font-mono text-xs md:text-sm font-semibold tracking-wide text-zinc-100"
               >
                 {currentItem.role}
               </motion.span>
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Headline */}
         <motion.h2

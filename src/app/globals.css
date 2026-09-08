@@ -178,7 +178,14 @@ html.lenis body {
 
 /* ========== Utility Classes ========== */
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 40%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-silver {
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 35%, #94a3b8 70%, #64748b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

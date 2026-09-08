@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:resume": "node scripts/generate_resume.js"
+    "generate:resume": "node scripts/generate_resume.js",
+    "kill-dev": "node scripts/kill_dev.js"
   },
   "dependencies": {
     "firebase": "^12.18.0",
