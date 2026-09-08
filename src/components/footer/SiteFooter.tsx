@@ -1,9 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Eye, MapPin } from "lucide-react";
+import { Eye, MapPin, Radio } from "lucide-react";
 import { getLivePageViews } from "@/lib/guestbook";
 import { getVisitorLocation, VisitorLocation } from "@/lib/geo";
+import {
+  initPresence,
+  subscribeActiveViewers,
+  ActiveViewer,
+} from "@/lib/presence";
+import LivePresenceRadar from "@/components/effects/LivePresenceRadar";
 
 const footerLinks = [
   { label: "Projects", href: "#projects" },
@@ -16,17 +22,38 @@ const footerLinks = [
 export default function SiteFooter() {
   const [views, setViews] = useState<number | null>(null);
   const [location, setLocation] = useState<VisitorLocation | null>(null);
+  const [activeCount, setActiveCount] = useState<number>(1);
+  const [activeViewers, setActiveViewers] = useState<ActiveViewer[]>([]);
+  const [isRadarOpen, setIsRadarOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+
+    // 1. Initialize real-time presence heartbeat
+    const cleanupPresence = initPresence();
+
+    // 2. Subscribe to active concurrent viewers
+    const unsubscribeViewers = subscribeActiveViewers((data) => {
+      if (isMounted) {
+        setActiveCount(data.count);
+        setActiveViewers(data.viewers);
+      }
+    });
+
+    // 3. All-time cumulative page visits
     getLivePageViews().then((count) => {
       if (isMounted) setViews(count);
     });
+
+    // 4. Visitor Geo location
     getVisitorLocation().then((loc) => {
       if (isMounted && loc) setLocation(loc);
     });
+
     return () => {
       isMounted = false;
+      cleanupPresence();
+      unsubscribeViewers();
     };
   }, []);
 
@@ -56,24 +83,44 @@ export default function SiteFooter() {
           ))}
         </div>
 
-        {/* Status, Live Views & Instagram Badge Row */}
+        {/* Status, Live Viewers & Location Badge Row */}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          {/* Status: Currently building */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-3.5 py-1.5 text-xs text-[#aaa]">
+          {/* Real-Time Live Concurrent Viewers (Clickable Radar) */}
+          <button
+            type="button"
+            onClick={() => setIsRadarOpen(true)}
+            title="Click to see who is viewing live right now"
+            className="group inline-flex items-center gap-2 rounded-full border border-[#06d6a0]/30 bg-[#06d6a0]/[0.06] hover:bg-[#06d6a0]/15 px-3.5 py-1.5 text-xs text-[#06d6a0] shadow-[0_0_15px_rgba(6,214,160,0.15)] transition-all cursor-pointer hover:scale-105 active:scale-95"
+          >
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#06d6a0] opacity-75" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#06d6a0] opacity-80" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#06d6a0]" />
             </span>
-            <span>Currently building</span>
-          </div>
+            <span className="font-mono font-bold text-white">
+              {activeCount}
+            </span>
+            <span className="text-[#a7f3d0] font-medium">
+              {activeCount === 1 ? "viewer live" : "viewers live"}
+            </span>
+            <Radio className="h-3 w-3 opacity-60 group-hover:opacity-100 transition-opacity ml-0.5" />
+          </button>
 
-          {/* Real-Time Live Views */}
+          {/* All-Time Cumulative Page Views */}
           <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-3.5 py-1.5 text-xs text-[#888]">
-            <Eye className="h-3.5 w-3.5 text-[#06d6a0]" />
+            <Eye className="h-3.5 w-3.5 text-[#4361ee]" />
             <span className="font-mono font-bold text-white">
               {views ? views.toLocaleString() : "..."}
             </span>
-            <span className="text-[#666]">live views</span>
+            <span className="text-[#666]">total views</span>
+          </div>
+
+          {/* Status: Currently building */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-3.5 py-1.5 text-xs text-[#aaa]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c77dff] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#c77dff]" />
+            </span>
+            <span>Currently building</span>
           </div>
 
           {/* Dynamic Visitor Location */}
@@ -98,6 +145,14 @@ export default function SiteFooter() {
           </p>
         </div>
       </div>
+
+      {/* Live Presence Interactive Radar Modal */}
+      <LivePresenceRadar
+        isOpen={isRadarOpen}
+        onClose={() => setIsRadarOpen(false)}
+        viewers={activeViewers}
+        count={activeCount}
+      />
     </footer>
   );
 }

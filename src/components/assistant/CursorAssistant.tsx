@@ -137,6 +137,41 @@ export default function CursorAssistant() {
     return () => document.removeEventListener("visibilitychange", handleVisibility);
   }, []);
 
+  // Live celebration easter egg: reaction when someone signs the guestbook or waves
+  useEffect(() => {
+    const handleReviewCelebration = (e: CustomEvent<{ name?: string }>) => {
+      setIsSleeping(false);
+      const name = e.detail?.name || "Someone";
+      setSpeech(`🎉 Meow! ${name} just signed the guestbook!`);
+      if (posRef.current) {
+        const x = posRef.current.x + 16;
+        const y = posRef.current.y - 10;
+        setHearts((prev) => [
+          ...prev,
+          { id: Date.now(), x, y },
+          { id: Date.now() + 1, x: x - 15, y: y - 10 },
+          { id: Date.now() + 2, x: x + 15, y: y - 10 },
+        ]);
+      }
+      setTimeout(() => setSpeech(null), 5000);
+    };
+
+    const handleWaveReceived = (e: CustomEvent<{ fromName?: string }>) => {
+      setIsSleeping(false);
+      const name = e.detail?.fromName || "Someone";
+      setSpeech(`👋 Meow! ${name} just waved at everyone! ✨`);
+      setTimeout(() => setSpeech(null), 4500);
+    };
+
+    window.addEventListener("live-review-celebration", handleReviewCelebration as EventListener);
+    window.addEventListener("live-wave-received", handleWaveReceived as EventListener);
+
+    return () => {
+      window.removeEventListener("live-review-celebration", handleReviewCelebration as EventListener);
+      window.removeEventListener("live-wave-received", handleWaveReceived as EventListener);
+    };
+  }, []);
+
   // Easter egg: fast scroll zoomies
   useEffect(() => {
     let lastScrollY = window.scrollY;

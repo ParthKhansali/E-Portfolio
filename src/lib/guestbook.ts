@@ -10,6 +10,7 @@ import {
   setDoc,
   updateDoc,
   increment,
+  onSnapshot,
 } from "firebase/firestore";
 import { signInWithPopup, signOut as fbSignOut } from "firebase/auth";
 import { auth, db, googleProvider } from "./firebase";
@@ -102,6 +103,54 @@ export async function fetchReviews(): Promise<ReviewItem[]> {
   } catch (err) {
     console.warn("Firestore fetch issue:", err);
     return [];
+  }
+}
+
+/**
+ * Real-time listener for newly submitted guestbook reviews
+ * (ignores initial docs and triggers only when a new doc is added in real time)
+ */
+export function subscribeToNewReviews(
+  callback: (review: ReviewItem) => void
+): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  let isFirstEmission = true;
+  try {
+    const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), limit(1));
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        if (isFirstEmission) {
+          isFirstEmission = false;
+          return;
+        }
+
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            const d = change.doc.data();
+            callback({
+              id: change.doc.id,
+              name: d.name || "Anonymous",
+              role: d.role || "Verified Visitor",
+              message: d.message || "",
+              rating: d.rating || 5,
+              avatar: d.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(d.name || "Visitor")}`,
+              isGoogleVerified: d.isGoogleVerified ?? true,
+              email: d.email,
+              createdAt: d.createdAt || new Date().toISOString(),
+            });
+          }
+        });
+      },
+      (err) => {
+        console.debug("Review subscription issue:", err);
+      }
+    );
+    return unsubscribe;
+  } catch (err) {
+    console.debug("Subscribe reviews error:", err);
+    return () => {};
   }
 }
 

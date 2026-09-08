@@ -15,6 +15,7 @@ import {
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { asset } from "@/lib/basepath";
+import { updatePresenceUser } from "@/lib/presence";
 
 export default function GuestbookSection() {
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
@@ -55,6 +56,9 @@ export default function GuestbookSection() {
         };
         setGoogleUser(user);
         localStorage.setItem("pk_google_user", JSON.stringify(user));
+        updatePresenceUser(user);
+      } else {
+        updatePresenceUser(null);
       }
     });
 

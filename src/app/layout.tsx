@@ -10,6 +10,7 @@ import ScrollProgress from "@/components/effects/ScrollProgress";
 import CursorAssistant from "@/components/assistant/CursorAssistant";
 import CommandPalette from "@/components/navigation/CommandPalette";
 import ResumeModal from "@/components/resume/ResumeModal";
+import LiveReviewCelebration from "@/components/effects/LiveReviewCelebration";
 import { asset } from "@/lib/basepath";
 
 const inter = Inter({
@@ -166,6 +167,9 @@ export default function RootLayout({
 
         {/* Global Resume Preview & Download Modal mounted at body bottom */}
         <ResumeModal />
+
+        {/* Real-time Guestbook Review Celebration & Live Wave Easter Egg Toast */}
+        <LiveReviewCelebration />
       </body>
     </html>
   );
