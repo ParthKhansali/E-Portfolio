@@ -91,7 +91,7 @@ const items: SearchItem[] = [
   },
   {
     id: "mun",
-    title: "Graphic Era MUN Club — Director General",
+    title: "Graphic Era MUN Club: Director General",
     category: "Leadership",
     description: "Second-highest executive officer leading strategic operations and debate",
     icon: Briefcase,
@@ -235,11 +235,11 @@ export default function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0f] shadow-2xl z-10"
+            className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-[#333328] bg-[#171714] shadow-[0_25px_70px_rgba(0,0,0,0.9)] z-10"
           >
             {/* Input Header */}
-            <div className="flex items-center gap-3 border-b border-white/[0.08] px-4 py-3.5">
-              <Search className="h-5 w-5 text-[#666]" />
+            <div className="flex items-center gap-3 border-b border-[#333328] px-4 py-3.5 bg-[#1a1a16]">
+              <Search className="h-5 w-5 text-[#8a8a7a]" />
               <input
                 ref={inputRef}
                 type="text"
@@ -249,24 +249,24 @@ export default function CommandPalette() {
                   setSelectedIndex(0);
                 }}
                 onKeyDown={handleInputKeyDown}
-                placeholder="Search the site..."
-                className="w-full bg-transparent text-sm text-white placeholder-[#555] outline-none"
+                placeholder="Search projects, skills, notes, or actions..."
+                className="w-full bg-transparent text-sm text-[#f0ece4] placeholder-[#7a7a6b] outline-none"
               />
               {query && (
                 <button
                   onClick={() => setQuery("")}
-                  className="text-[#666] hover:text-white"
+                  className="text-[#8a8a7a] hover:text-[#f0ece4] transition-colors p-1"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
-              <kbd className="rounded border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-mono text-[#666]">
+              <kbd className="rounded-lg border border-[#333328] bg-[#1e1e1a] px-2 py-0.5 text-[10px] font-mono text-[#8a8a7a]">
                 Esc
               </kbd>
             </div>
 
             {/* Results List */}
-            <div className="max-h-[340px] overflow-y-auto p-2">
+            <div className="max-h-[340px] overflow-y-auto p-2 space-y-1">
               {filteredItems.length > 0 ? (
                 filteredItems.map((item, index) => {
                   const Icon = item.icon;
@@ -277,54 +277,60 @@ export default function CommandPalette() {
                       key={item.id}
                       onClick={() => handleSelect(item)}
                       onMouseEnter={() => setSelectedIndex(index)}
-                      className={`flex cursor-pointer items-center justify-between rounded-xl px-3.5 py-2.5 transition-colors ${
-                        isSelected ? "bg-[#4361ee]/15 text-white" : "text-[#aaa] hover:bg-white/[0.03]"
+                      className={`flex cursor-pointer items-center justify-between rounded-xl px-3.5 py-2.5 transition-all ${
+                        isSelected
+                          ? "bg-[#d4a843]/15 text-[#f0ece4] border border-[#d4a843]/30 shadow-sm"
+                          : "text-[#c5c2b8] border border-transparent hover:bg-[#1e1e1a] hover:border-[#333328]"
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div
-                          className={`flex h-8 w-8 items-center justify-center rounded-lg border ${
+                          className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-colors ${
                             isSelected
-                              ? "border-[#4361ee]/40 bg-[#4361ee]/20 text-white"
-                              : "border-white/[0.06] bg-white/[0.02] text-[#888]"
+                              ? "border-[#d4a843]/40 bg-[#d4a843]/20 text-[#d4a843]"
+                              : "border-[#333328] bg-[#1e1e1a] text-[#8a8a7a]"
                           }`}
                         >
                           <Icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-white">
+                          <div className="text-xs font-semibold text-[#f0ece4]">
                             {item.title}
                           </div>
-                          <div className="text-[11px] text-[#666] line-clamp-1">
+                          <div className="text-[11px] text-[#8a8a7a] line-clamp-1">
                             {item.description}
                           </div>
                         </div>
                       </div>
-                      <span className="text-[10px] font-mono text-[#555] uppercase">
+                      <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-md ${
+                        isSelected ? "text-[#d4a843] bg-[#d4a843]/10" : "text-[#7a7a6b] bg-[#1e1e1a]"
+                      }`}>
                         {item.category}
                       </span>
                     </div>
                   );
                 })
               ) : (
-                <div className="p-8 text-center text-xs text-[#666]">
-                  Nothing here. Yet.
+                <div className="p-8 text-center text-xs text-[#8a8a7a]">
+                  No matching items found. Try searching for &ldquo;Projects&rdquo; or &ldquo;Skills&rdquo;.
                 </div>
               )}
             </div>
 
             {/* Footer Navigation Hints */}
-            <div className="flex items-center justify-between border-t border-white/[0.06] bg-white/[0.02] px-4 py-2 text-[11px] text-[#666]">
+            <div className="flex items-center justify-between border-t border-[#333328] bg-[#12120f] px-4 py-2.5 text-[11px] text-[#8a8a7a]">
               <div className="flex items-center gap-3">
-                <span>
-                  <kbd className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono">↑</kbd>{" "}
-                  <kbd className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono">↓</kbd> Navigate
+                <span className="flex items-center gap-1">
+                  <kbd className="rounded border border-[#333328] bg-[#1e1e1a] px-1.5 py-0.5 font-mono text-[10px] text-[#c5c2b8]">↑</kbd>
+                  <kbd className="rounded border border-[#333328] bg-[#1e1e1a] px-1.5 py-0.5 font-mono text-[10px] text-[#c5c2b8]">↓</kbd>
+                  <span className="ml-1">Navigate</span>
                 </span>
-                <span>
-                  <kbd className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono">↵</kbd> Select
+                <span className="flex items-center gap-1">
+                  <kbd className="rounded border border-[#333328] bg-[#1e1e1a] px-1.5 py-0.5 font-mono text-[10px] text-[#c5c2b8]">↵</kbd>
+                  <span className="ml-1">Select</span>
                 </span>
               </div>
-              <span>Parth Khansali Command Center</span>
+              <span className="font-mono text-[10px] text-[#6b6b5c]">Parth Khansali Command Center</span>
             </div>
           </motion.div>
         </div>

@@ -6,7 +6,7 @@ export default function NotFound() {
     <main className="relative flex min-h-screen flex-col items-center justify-center bg-[#050505] px-6 text-center text-[#e8e8e8]">
       <div className="mx-auto max-w-md space-y-6">
         <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
-          404 — I built everything except this page.
+          404: I built everything except this page.
         </h1>
         <p className="text-xs sm:text-sm text-[#777] leading-relaxed">
           Looks like this route escaped the notes app and got lost in the ether.

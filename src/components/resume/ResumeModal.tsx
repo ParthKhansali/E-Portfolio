@@ -67,19 +67,19 @@ export default function ResumeModal() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex flex-col w-full max-w-5xl h-[90vh] rounded-2xl border border-white/20 bg-[#0f0f13] shadow-[0_30px_90px_rgba(0,0,0,0.98)] overflow-hidden"
+        className="relative flex flex-col w-full max-w-5xl h-[90vh] rounded-2xl border border-[#333328] bg-[#141412] shadow-[0_30px_90px_rgba(0,0,0,0.98)] overflow-hidden"
       >
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between border-b border-white/[0.1] px-5 sm:px-7 py-3.5 sm:py-4 bg-[#14141a] flex-shrink-0">
+        <div className="flex items-center justify-between border-b border-[#333328] px-5 sm:px-7 py-3.5 sm:py-4 bg-[#1a1a16] flex-shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4361ee]/20 text-[#4361ee] border border-[#4361ee]/40 flex-shrink-0 shadow-[0_0_15px_rgba(67,97,238,0.25)]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#d4a843]/15 text-[#d4a843] border border-[#d4a843]/30 flex-shrink-0 shadow-[0_0_15px_rgba(212,168,67,0.15)]">
               <FileText className="h-4 w-4" />
             </div>
             <div className="truncate">
-              <h3 className="font-display text-sm sm:text-base font-bold text-white truncate">
-                Parth Khansali — Resume
+              <h3 className="font-display text-sm sm:text-base font-bold text-[#f0ece4] truncate">
+                Parth Khansali: Curriculum Vitae
               </h3>
-              <p className="text-[11px] text-[#888] font-mono truncate">
+              <p className="text-[11px] text-[#8a8a7a] font-mono truncate">
                 Computer Science &amp; Engineering · Dehradun, Uttarakhand
               </p>
             </div>
@@ -91,7 +91,7 @@ export default function ResumeModal() {
               href={asset("/parth_resume.pdf")}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.05] hover:bg-white/[0.1] hover:text-white px-3.5 py-1.5 text-xs font-medium text-neutral-300 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-[#333328] bg-[#1e1e1a] hover:bg-[#252520] hover:text-[#f0ece4] px-3.5 py-1.5 text-xs font-medium text-[#c5c2b8] transition-colors"
               title="Open full PDF in a new tab"
             >
               <ExternalLink className="h-3.5 w-3.5" />
@@ -102,7 +102,7 @@ export default function ResumeModal() {
             <a
               href={asset("/parth_resume.pdf")}
               download="Parth_Khansali_Resume.pdf"
-              className="inline-flex items-center gap-2 rounded-full bg-[#4361ee] hover:bg-[#3451d1] px-4 sm:px-5 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(67,97,238,0.4)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] hover:bg-[#e0b44f] px-4 sm:px-5 py-2 text-xs font-semibold text-[#0f0f0d] shadow-[0_0_20px_rgba(212,168,67,0.25)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
             >
               <Download className="h-3.5 w-3.5" />
               <span>Download PDF</span>
@@ -112,7 +112,7 @@ export default function ResumeModal() {
             <button
               type="button"
               onClick={close}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/[0.05] text-neutral-400 hover:text-white hover:bg-white/[0.12] transition-colors ml-1 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#333328] bg-[#1e1e1a] text-[#8a8a7a] hover:text-[#f0ece4] hover:bg-[#252520] transition-colors ml-1 cursor-pointer"
               aria-label="Close resume preview"
             >
               <X className="h-4 w-4" />
@@ -121,21 +121,21 @@ export default function ResumeModal() {
         </div>
 
         {/* Embedded PDF Viewer with Canvas Backdrop */}
-        <div className="relative flex-1 w-full bg-[#18181e] p-2 sm:p-4 overflow-hidden flex items-center justify-center">
+        <div className="relative flex-1 w-full bg-[#0f0f0d] p-2 sm:p-4 overflow-hidden flex items-center justify-center">
           <iframe
             src={asset("/parth_resume.pdf#view=FitH")}
-            className="w-full h-full max-w-4xl rounded-xl border border-black/40 shadow-2xl bg-white"
+            className="w-full h-full max-w-4xl rounded-xl border border-[#333328] shadow-2xl bg-white"
             title="Parth Khansali Resume Preview"
           />
         </div>
 
         {/* Mobile quick-download banner */}
-        <div className="flex sm:hidden items-center justify-between px-4 py-2.5 bg-[#14141a] border-t border-white/[0.08] text-xs text-neutral-400">
+        <div className="flex sm:hidden items-center justify-between px-4 py-2.5 bg-[#1a1a16] border-t border-[#333328] text-xs text-[#8a8a7a]">
           <span>Viewing Parth&apos;s Resume</span>
           <a
             href={asset("/parth_resume.pdf")}
             download="Parth_Khansali_Resume.pdf"
-            className="text-[#4361ee] font-semibold underline"
+            className="text-[#d4a843] font-semibold underline"
           >
             Download PDF
           </a>

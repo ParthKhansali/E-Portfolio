@@ -6,12 +6,11 @@ import { Gavel, Trophy, GraduationCap } from "lucide-react";
 
 export default function Experience() {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-10%" });
+  const isInView = useInView(ref, { once: true, margin: "100px" });
   const [gavelTapped, setGavelTapped] = useState(false);
 
   const handleGavelClick = () => {
     setGavelTapped(true);
-    // Subtle Web Audio click
     try {
       const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -35,49 +34,49 @@ export default function Experience() {
       id: "mun-club",
       role: "Director General",
       org: "Graphic Era MUN Club",
-      period: "2024 — Present",
+      period: "2024 - Present",
       tag: "Leadership",
-      color: "#4361ee",
+      color: "#d4a843",
       description:
-        "I help run the university's MUN club — planning events, coordinating people, handling the unexpected and making sure things keep moving when the schedule inevitably doesn't.",
+        "I direct the university MUN club: organizing campus conferences, mentoring delegates, handling logistics, and keeping things running when schedules inevitably shift.",
       highlights: [
-        "Hosted 2 college-scale events",
-        "Helped promote the club across 15–20 schools",
-        "Participated in 4 MUNs and won 2",
-        "Participated in an IIT Roorkee MUN",
+        "Hosted 2 university-scale conferences",
+        "Coordinated outreach across 15+ partner schools and colleges",
+        "Participated in 4 regional MUNs with 2 delegate delegations awards",
+        "Delegated at IIT Roorkee MUN",
       ],
       humanLine:
-        "Turns out running an event and debugging an application have more in common than you'd think: something always breaks five minutes before the important part.",
+        "Organizing an event and debugging software have a lot in common: something will inevitably break right before the important moment, and you just work the problem.",
       hasGavel: true,
     },
     {
       id: "hackathons",
-      role: "HACKATHONS",
+      role: "Hackathon Sprints",
       org: "Hackaholic → iQOO Pune Hackathon",
       period: "3 Hackathons",
-      tag: "3 hackathons. A lot of caffeine.",
-      color: "#06d6a0",
+      tag: "Sprints",
+      color: "#8fb573",
       description:
-        "I like the part where an idea has to become a working demo before the clock runs out.",
+        "I love the intense sprint where an unvetted idea has to become a functional, deployed demo within 36 hours.",
       highlights: [
-        "Hackathon journey: Hackaholic → other hackathon sprints → iQOO Pune Hackathon",
-        "Runner-up across hackathon experiences where applicable",
-        "Fast-paced prototyping, scoping features under constraints, and shipping functional code before the deadline",
+        "Hackaholic sprint to iQOO Pune Hackathon finals",
+        "Rapid prototyping, aggressive feature scoping, and shipping functional backends under strict time limits",
+        "Collaborated across multidisciplinary student teams under pressure",
       ],
       icon: Trophy,
     },
     {
       id: "gehu-btech",
-      role: "Computer Science & Engineering",
+      role: "B.Tech Computer Science & Engineering",
       org: "Graphic Era Hill University, Dehradun",
-      period: "2024 — 2028",
+      period: "2024 - 2028",
       tag: "Academics",
-      color: "#7209b7",
+      color: "#c87941",
       description:
-        "Studying computer science fundamentals — algorithms, data structures, databases, and system design.",
+        "Studying computer science foundations: data structures, algorithms, databases, operating systems, and distributed architecture.",
       highlights: [
-        "Building real-world software across Web, Mobile, and AI",
-        "Balancing coursework with club leadership and active project builds",
+        "Building production software across web, mobile, and AI workflows",
+        "Balancing university coursework with active product development",
       ],
       icon: GraduationCap,
     },
@@ -86,68 +85,67 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="section-padding relative overflow-hidden bg-[#050505] border-t border-white/[0.04]"
+      className="section-padding relative overflow-hidden bg-[#0f0f0d] border-t border-[#f0ece4]/[0.06]"
       ref={ref}
+      aria-label="Experience and Leadership"
     >
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-4xl relative z-10">
         {/* Section Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-14 text-center px-4"
+          transition={{ duration: 0.5 }}
+          className="mb-12"
         >
-          <span className="mb-2.5 block text-xs uppercase tracking-[0.25em] font-semibold text-[#4361ee]">
-            BEYOND THE CODE
-          </span>
-          <h2 className="font-display text-[clamp(2.2rem,5vw,3.5rem)] font-bold tracking-tight text-white">
-            People, projects &amp; a few microphones
+          <p className="text-xs font-semibold tracking-wider text-[#d4a843] uppercase mb-2">
+            Experience &amp; Leadership
+          </p>
+          <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.5rem)] font-bold tracking-tight text-[#f0ece4]">
+            Beyond the code
           </h2>
-          <p className="mt-2.5 text-xs sm:text-sm text-[#888] max-w-lg mx-auto leading-relaxed">
-            Software isn&apos;t the only thing I&apos;ve spent time building.
+          <p className="mt-2 text-sm text-[#8a8a7a] max-w-lg leading-relaxed">
+            Software isn't the only thing I spend time building.
           </p>
         </motion.div>
 
         {/* Timeline Container */}
-        <div className="relative border-l border-white/[0.08] ml-4 sm:ml-8 pl-6 sm:pl-10 space-y-12">
+        <div className="relative border-l-2 border-[#2b2b24] ml-3 sm:ml-6 pl-6 sm:pl-8 space-y-10">
           {timelineEntries.map((entry, idx) => (
             <motion.div
               key={entry.id}
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -15 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: idx * 0.15 }}
-              className="relative group"
+              transition={{ duration: 0.5, delay: idx * 0.12 }}
+              className="experience-entry-card relative group"
             >
               {/* Timeline Node Dot */}
               <div
-                className="absolute -left-[31px] sm:-left-[47px] top-1.5 h-4 w-4 rounded-full border-2 border-[#050505] transition-transform duration-300 group-hover:scale-125"
-                style={{
-                  backgroundColor: entry.color,
-                  boxShadow: `0 0 16px ${entry.color}80`,
-                }}
+                className="absolute -left-[31px] sm:-left-[39px] top-2 h-3.5 w-3.5 rounded-full border-2 border-[#0f0f0d]"
+                style={{ backgroundColor: entry.color, boxShadow: `0 0 10px ${entry.color}33` }}
               />
 
               {/* Card Container */}
-              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 sm:p-7 backdrop-blur-md transition-all duration-300 hover:border-white/10 hover:bg-white/[0.04]">
+              <div className="rounded-xl border border-[#333328] bg-[#171714] p-5 sm:p-6 transition-all duration-300 hover:border-[#555548]">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                   <span
-                    className="rounded-full border px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                    className="border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded"
                     style={{
                       borderColor: `${entry.color}40`,
                       color: entry.color,
+                      backgroundColor: `${entry.color}15`,
                     }}
                   >
                     {entry.tag}
                   </span>
-                  <span className="text-xs font-mono text-[#666]">{entry.period}</span>
+                  <span className="text-xs text-[#6a6a5e] font-mono">{entry.period}</span>
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mt-1">
                   <div>
-                    <h3 className="text-xl font-bold text-white transition-colors group-hover:text-[#4361ee]">
+                    <h3 className="text-lg sm:text-xl font-bold text-[#f0ece4]">
                       {entry.role}
                     </h3>
-                    <p className="text-sm font-medium text-[#aaa]">{entry.org}</p>
+                    <p className="text-xs sm:text-sm text-[#b5b0a1]">{entry.org}</p>
                   </div>
 
                   {/* Interactive Gavel Easter Egg */}
@@ -155,9 +153,9 @@ export default function Experience() {
                     <button
                       onClick={handleGavelClick}
                       title="Tap Gavel (Easter Egg)"
-                      className="group/gavel relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-[#aaa] transition-all hover:scale-110 hover:border-[#4361ee] hover:text-[#4361ee] cursor-pointer"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-[#333328] bg-[#1e1e1a] text-[#8a8a7a] transition-all hover:scale-105 hover:border-[#d4a843] hover:text-[#d4a843] cursor-pointer"
                     >
-                      <Gavel className="h-4 w-4 transition-transform group-hover/gavel:-rotate-12" />
+                      <Gavel className="h-4 w-4" />
                     </button>
                   )}
                 </div>
@@ -166,34 +164,34 @@ export default function Experience() {
                 <AnimatePresence>
                   {entry.hasGavel && gavelTapped && (
                     <motion.div
-                      initial={{ opacity: 0, y: -10 }}
+                      initial={{ opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="mt-3 inline-flex items-center gap-2 rounded-md bg-[#4361ee]/20 border border-[#4361ee]/40 px-3 py-1.5 text-xs text-white"
+                      exit={{ opacity: 0, y: -6 }}
+                      className="mt-3 inline-flex items-center gap-2 rounded border border-[#d4a843]/40 bg-[#d4a843]/15 px-3 py-1.5 text-xs text-[#f0ece4]"
                     >
                       <span>*Gavel Taps*</span>
-                      <span className="font-semibold text-[#06d6a0]">
-                        &quot;The house comes to order. Point of inquiry recognized!&quot;
+                      <span className="text-[#8fb573]">
+                        &quot;The house comes to order. Point of inquiry recognized.&quot;
                       </span>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#888]">
+                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#8a8a7a]">
                   {entry.description}
                 </p>
 
-                <ul className="mt-4 space-y-1.5 border-t border-white/[0.04] pt-4">
+                <ul className="mt-4 space-y-1.5 border-t border-[#333328] pt-3">
                   {entry.highlights.map((bullet, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-[#777]">
-                      <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-[#4361ee]" />
+                    <li key={i} className="flex items-start gap-2 text-xs text-[#8a8a7a]">
+                      <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-[#d4a843]" />
                       <span>{bullet}</span>
                     </li>
                   ))}
                 </ul>
 
                 {entry.humanLine && (
-                  <p className="mt-4 rounded-xl border border-white/[0.04] bg-white/[0.015] p-3 text-xs italic text-[#aaa] leading-relaxed">
+                  <p className="mt-3.5 border-l-2 border-[#333328] pl-3 text-xs text-[#6a6a5e] leading-relaxed italic">
                     &ldquo;{entry.humanLine}&rdquo;
                   </p>
                 )}

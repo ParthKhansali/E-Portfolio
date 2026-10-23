@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: "/projects",
   },
   openGraph: {
-    title: "Projects & Engineering Builds — Parth Khansali",
+    title: "Projects & Engineering Builds | Parth Khansali",
     description:
       "Explore software projects built by Parth Khansali across AI systems, mobile applications, distributed workflows, and developer tooling.",
     url: "https://parthkhansali.com/projects",

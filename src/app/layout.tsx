@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
@@ -6,11 +6,13 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/navigation/Navbar";
 import StarfieldCanvas from "@/components/effects/StarfieldCanvas";
 import CursorSpotlight from "@/components/effects/CursorSpotlight";
-import ScrollProgress from "@/components/effects/ScrollProgress";
 import CursorAssistant from "@/components/assistant/CursorAssistant";
 import CommandPalette from "@/components/navigation/CommandPalette";
 import ResumeModal from "@/components/resume/ResumeModal";
 import LiveReviewCelebration from "@/components/effects/LiveReviewCelebration";
+import RetroArcadeModal from "@/components/effects/RetroArcadeModal";
+import AnimeScrollHUD from "@/components/effects/AnimeScrollHUD";
+import ScrollDots from "@/components/effects/ScrollDots";
 import { asset } from "@/lib/basepath";
 
 const inter = Inter({
@@ -25,14 +27,22 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0f0f0d",
+  colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://parthkhansali.com"),
   title: {
-    default: "Parth Khansali — Developer · Builder · Problem Solver",
+    default: "Parth Khansali | Developer · Builder · Problem Solver",
     template: "%s | Parth Khansali",
   },
   description:
-    "Portfolio of Parth Khansali — Computer Science student, systems builder, and developer. Building AI systems, mobile applications, distributed workflows, and university platforms.",
+    "Portfolio of Parth Khansali, Computer Science student, systems builder, and developer. Building AI systems, mobile applications, distributed workflows, and university platforms.",
   keywords: [
     "Parth Khansali",
     "software engineer",
@@ -58,7 +68,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://parthkhansali.com",
     siteName: "Parth Khansali",
-    title: "Parth Khansali — Developer · Builder · Problem Solver",
+    title: "Parth Khansali | Developer · Builder · Problem Solver",
     description:
       "I build things I wish already existed. Computer Science student, builder, and developer.",
     images: [
@@ -66,13 +76,13 @@ export const metadata: Metadata = {
         url: "/profile.jpg",
         width: 1200,
         height: 630,
-        alt: "Parth Khansali — Developer & Builder",
+        alt: "Parth Khansali: Developer & Builder",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Parth Khansali — Developer · Builder · Problem Solver",
+    title: "Parth Khansali | Developer · Builder · Problem Solver",
     description:
       "I build things I wish already existed. Computer Science student, builder, and developer.",
     images: ["/profile.jpg"],
@@ -118,10 +128,23 @@ const jsonLd = {
       "@id": "https://parthkhansali.com/#website",
       url: "https://parthkhansali.com",
       name: "Parth Khansali Portfolio",
-      description: "Portfolio of Parth Khansali — Developer, Builder, Problem Solver",
+      description: "Portfolio of Parth Khansali: Developer, Builder, Problem Solver",
       publisher: {
         "@id": "https://parthkhansali.com/#person",
       },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://gehuconnect.in/#app",
+      name: "GEHU Connect",
+      applicationCategory: "SocialNetworkingApplication",
+      operatingSystem: "iOS, Android, React Native",
+      author: {
+        "@id": "https://parthkhansali.com/#person",
+      },
+      description:
+        "Student community and networking platform built with React Native and Spring Boot for Graphic Era Hill University students.",
+      url: "https://gehuconnect.in",
     },
   ],
 };
@@ -134,17 +157,27 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} dark antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if ('scrollRestoration' in history) {
+                  history.scrollRestoration = 'manual';
+                }
+                window.scrollTo(0, 0);
+              } catch (e) {}
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen bg-[#050505] text-[#e8e8e8] selection:bg-[#4361ee]/30 selection:text-white">
-        {/* Viewport Top Reading Progress Line */}
-        <ScrollProgress />
+      <body className="min-h-screen bg-[#0f0f0d] text-[#f0ece4] selection:bg-[#d4a843]/25 selection:text-white">
 
         {/* Global Twinkling Starfield Canvas Background */}
         <StarfieldCanvas />
@@ -160,6 +193,8 @@ export default function RootLayout({
 
         {/* Lenis Smooth Scroll Wrapper */}
         <SmoothScroll>
+          <AnimeScrollHUD />
+          <ScrollDots />
           <CustomCursor />
           <Navbar />
           {children}
@@ -170,6 +205,9 @@ export default function RootLayout({
 
         {/* Real-time Guestbook Review Celebration & Live Wave Easter Egg Toast */}
         <LiveReviewCelebration />
+
+        {/* Playable Retro Arcade Easter Egg (Nether Dash) */}
+        <RetroArcadeModal />
       </body>
     </html>
   );

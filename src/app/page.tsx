@@ -10,7 +10,7 @@ import SiteFooter from "@/components/footer/SiteFooter";
 
 export default function Home() {
   return (
-    <main className="relative bg-[#050505] text-[#e8e8e8]">
+    <main className="relative bg-[#0f0f0d] text-[#f0ece4]">
       {/* 1. Clean Typographic Engineering Hero */}
       <Hero />
 

@@ -75,7 +75,6 @@ This document outlines the architecture, directory structure, data flow, and eng
 │       ├── geo.ts              # Multi-tier IP geolocation resolver (Cloudflare/ipinfo)
 │       └── guestbook.ts        # Firestore queries, Google auth sign-in, view counter
 ├── ARCHITECTURE.md             # This file
-├── AGENTS.md                   # Environment rules
 ├── package.json
 └── tsconfig.json
 ```

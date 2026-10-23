@@ -1,5 +1,5 @@
 /**
- * asset(path) — base-path-aware public asset helper
+ * asset(path): base-path-aware public asset helper
  *
  * Usage:  asset("/parth_resume.pdf")
  *         asset("/oneko.gif")

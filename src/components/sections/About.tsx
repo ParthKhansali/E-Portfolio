@@ -1,149 +1,192 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { Sparkles, Cpu, Network, MapPin, Wrench } from "lucide-react";
-import GlowCard from "../GlowCard";
+import { asset } from "@/lib/basepath";
+import { sounds } from "@/lib/soundFx";
 
-const technicalInterests = [
+const CURRENT_CARDS = [
   {
-    title: "AI Systems",
-    desc: "How AI becomes part of a product instead of just a chat box.",
-    icon: Sparkles,
-    glow: "114, 9, 183",
+    key: "building",
+    label: "Currently Building",
+    body: "GEHU Connect (alpha with active university students) and ForgeFlow workflow automation. Plus whatever sparked curiosity this week.",
+    accent: "#d4a843",
   },
   {
-    title: "Systems",
-    desc: "Operating systems, concurrency, processes, memory and the machinery underneath the UI.",
-    icon: Cpu,
-    glow: "67, 97, 238",
+    key: "learning",
+    label: "Currently Learning",
+    body: "Backend depth, database internals, and systems fundamentals: the concepts that explain why things choke at scale.",
+    accent: "#8fb573",
   },
   {
-    title: "Distributed Software",
-    desc: "What happens when one machine isn't enough — and when the network inevitably has other plans.",
-    icon: Network,
-    glow: "6, 214, 160",
+    key: "open",
+    label: "Open To",
+    body: "Software engineering internships, research collaborations, and engineering problems that are deeper than they look.",
+    accent: "#c87941",
   },
-  {
-    title: "Data + Maps",
-    desc: "Turning messy real-world information into something people can actually understand.",
-    icon: MapPin,
-    glow: "255, 190, 11",
-  },
-  {
-    title: "Developer Experience",
-    desc: "Tools and interfaces that make complicated things feel simpler.",
-    icon: Wrench,
-    glow: "131, 56, 236",
-  },
+];
+
+const RABBIT_HOLES = [
+  "AI That Anticipates",
+  "Full-Stack Product Builds",
+  "Frontend That Feels Right",
+  "Distributed Systems",
+  "Automating the Boring Parts",
+  "Database Internals",
+  "Maps & Geospatial",
+  "Real-World Records",
+  "DX That Doesn't Suck",
+  "Whatever broke last week",
 ];
 
 export default function About() {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-10%" });
+  const isInView = useInView(ref, { once: true, margin: "100px" });
+  const [isGlitch, setIsGlitch] = useState(false);
+
+  const toggleGlitch = () => {
+    sounds.playClick(900, 0.02);
+    setIsGlitch(!isGlitch);
+  };
 
   return (
     <section
       id="about"
-      className="section-padding relative overflow-hidden bg-[#050505] border-t border-white/[0.04]"
+      className="section-padding relative overflow-hidden bg-[#0f0f0d] border-t border-[#f0ece4]/[0.06]"
       ref={ref}
+      aria-label="About Parth Khansali"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-16 lg:grid-cols-12 lg:gap-14">
-          {/* Left Column — About Me (Section 8) */}
-          <div className="flex flex-col justify-between lg:col-span-6">
-            <div>
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ duration: 0.6 }}
-                className="mb-3 block text-xs uppercase tracking-[0.25em] font-semibold text-[#4361ee]"
-              >
-                A LITTLE CONTEXT
-              </motion.span>
+      <div className="mx-auto max-w-6xl relative z-10">
+        {/* Section Title */}
+        <div className="mb-12">
+          <h2 className="font-display text-[clamp(2.2rem,4.4vw,3.5rem)] font-bold tracking-tight text-[#f0ece4]">
+            A bit about me
+          </h2>
+        </div>
 
-              <h2 className="font-display text-[clamp(2.2rem,4vw,3.25rem)] font-bold tracking-tight text-white mb-6">
-                So, who is Parth?
-              </h2>
+        {/* 2-Column Grid: Portrait on Left, Bio on Right */}
+        <div className="grid gap-10 md:grid-cols-12 items-start">
+          {/* Left Column: Portrait Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="md:col-span-5 lg:col-span-4"
+          >
+            <div className="rounded-xl border border-[#333328] bg-[#171714] p-3 sm:p-4">
+              {/* Header bar */}
+              <div className="mb-3 flex items-center justify-between text-xs text-[#8a8a7a]">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#8fb573]" />
+                  <span>Dehradun, India</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={toggleGlitch}
+                  title="Toggle creative visual"
+                  className="border border-[#333328] px-2 py-0.5 text-[10px] text-[#b5b0a1] hover:border-[#555548] hover:text-[#f0ece4] transition-colors cursor-pointer"
+                >
+                  {isGlitch ? "Photo" : "Alter-ego"}
+                </button>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="space-y-4 text-xs sm:text-sm leading-relaxed text-[#999]"
+              {/* Photo Frame */}
+              <div
+                onClick={toggleGlitch}
+                className="relative aspect-square w-full overflow-hidden rounded-lg border border-[#333328] bg-[#1e1e1a] cursor-pointer"
+                title="Click to toggle visual"
               >
-                <p>
-                  I&apos;m a Computer Science student who enjoys the whole process of building — the ridiculous first idea, the ugly prototype, the &ldquo;why is this not working?&rdquo; phase, and eventually the moment when it all clicks.
-                </p>
-                <p>
-                  I started with the usual curiosity about code and kept following it into web apps, mobile products, AI, databases and systems. I still don&apos;t have everything figured out. That&apos;s part of what makes it fun.
-                </p>
-                <p>
-                  Outside code, I&apos;ve spent a fair amount of time around debating, MUNs, event organisation and people who enjoy arguing about whether a comma can change a resolution.
-                </p>
-              </motion.div>
+                {isGlitch ? (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-full w-full object-cover"
+                  >
+                    <source src={asset("/media/glitch-eyes.mp4")} type="video/mp4" />
+                  </video>
+                ) : (
+                  <Image
+                    src={asset("/profile.jpg")}
+                    alt="Parth Khansali"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 380px"
+                    className="object-cover transition-transform duration-500 hover:scale-102"
+                    priority
+                  />
+                )}
+              </div>
+
+              {/* Caption */}
+              <div className="mt-3 flex items-center justify-between text-xs text-[#6a6a5e] pt-2 border-t border-[#333328]">
+                <span>Parth Khansali</span>
+                <span>30.31° N, 78.03° E</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Bio Paragraphs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="md:col-span-7 lg:col-span-8 flex flex-col justify-between"
+          >
+            <div className="space-y-4 text-sm leading-relaxed text-[#8a8a7a]">
+              <p>
+                I'm a CS undergrad at Graphic Era Hill University, Dehradun. I like the whole arc of building something: the messy first sketch, the ugly prototype, the &ldquo;why is this breaking at 2am&rdquo; debugging session, and eventually the moment it clicks and real people start depending on the thing.
+              </p>
+              <p>
+                Started with curiosity about how software actually works and followed it across mobile apps, web systems, AI, and database internals. I don't pretend to have it all figured out. Getting deeper into systems and understanding what happens under the hood is what keeps me going.
+              </p>
+              <p>
+                Outside of code, I run the university MUN club as Director General. Organizing a conference and shipping software have more in common than you'd think: tight deadlines, moving parts, and something always breaks five minutes before the important thing.
+              </p>
             </div>
 
-            {/* Closing Line Pill */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-md"
-            >
-              <p className="text-xs sm:text-sm italic font-medium text-[#ccc] leading-relaxed">
-                &ldquo;I like software that works, interfaces that feel good, and projects that leave me with a better question than the one I started with.&rdquo;
-              </p>
-            </motion.div>
+            {/* 3 Status Cards underneath bio */}
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {CURRENT_CARDS.map((card, idx) => (
+                <motion.div
+                  key={card.key}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.4, delay: 0.4 + idx * 0.1 }}
+                  className="about-anime-card rounded-xl border border-[#333328] bg-[#171714] p-4 flex flex-col justify-between"
+                >
+                  <div>
+                    <span className="block text-xs font-semibold text-[#f0ece4]">
+                      {card.label}
+                    </span>
+                    <p className="mt-2 text-xs text-[#8a8a7a] leading-relaxed">
+                      {card.body}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Rabbit Holes Section Below */}
+        <div className="mt-14 border-t border-[#333328] pt-8">
+          <div className="mb-4">
+            <h3 className="font-display text-lg font-bold text-[#f0ece4]">
+              Rabbit holes I'm in right now
+            </h3>
           </div>
 
-          {/* Right Column — Technical Interests (Section 6) */}
-          <div className="flex flex-col lg:col-span-6">
-            <div className="mb-6">
-              <span className="mb-2 block text-xs uppercase tracking-[0.25em] font-semibold text-[#c77dff]">
-                CURRENTLY OBSESSED WITH
+          <div className="flex flex-wrap gap-2">
+            {RABBIT_HOLES.map((tag) => (
+              <span
+                key={tag}
+                className="rounded border border-[#333328] bg-[#171714] px-3 py-1.5 text-xs text-[#b5b0a1] transition-colors hover:border-[#555548] hover:text-[#f0ece4]"
+              >
+                {tag}
               </span>
-              <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-white">
-                Things I&apos;m digging into
-              </h3>
-              <p className="mt-1 text-xs text-[#777]">
-                The rabbit holes currently winning.
-              </p>
-            </div>
-
-            {/* Interests Cards */}
-            <div className="space-y-3">
-              {technicalInterests.map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <motion.div
-                    key={item.title}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.4, delay: 0.15 * idx }}
-                  >
-                    <GlowCard
-                      glowColor={item.glow}
-                      className="group p-4 transition-colors hover:border-white/15"
-                    >
-                      <div className="flex items-start gap-3.5">
-                        <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white transition-colors group-hover:border-[#4361ee]/40 group-hover:bg-[#4361ee]/10">
-                          <Icon className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-white transition-colors group-hover:text-[#4361ee]">
-                            {item.title}
-                          </h4>
-                          <p className="mt-1 text-xs leading-relaxed text-[#888]">
-                            {item.desc}
-                          </p>
-                        </div>
-                      </div>
-                    </GlowCard>
-                  </motion.div>
-                );
-              })}
-            </div>
+            ))}
           </div>
         </div>
       </div>

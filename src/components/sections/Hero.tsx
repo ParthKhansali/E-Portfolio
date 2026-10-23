@@ -1,219 +1,274 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, BookOpen, Mail } from "lucide-react";
+import { ArrowRight, BookOpen, Mail, Gamepad2, RotateCw, Sparkles, FileText } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/icons/SocialIcons";
+import { asset } from "@/lib/basepath";
+import { sounds } from "@/lib/soundFx";
 
-const roleItems = [
-  { role: "Developer", line: "I build things I wish already existed." },
-  { role: "Builder", line: "I like ideas better once they're running." },
-  { role: "Problem Solver", line: "I enjoy the part where \"this should be easy\" stops being true." },
-  { role: "CS Student", line: "Usually building something." },
-  { role: "Curious Engineer", line: "Currently somewhere between AI, systems and a lot of tabs." },
+const roles = [
+  "Builder",
+  "Systems Thinker",
+  "MUN Director General",
+  "Midnight Debugger",
+  "Curious by Default",
+];
+
+const HERO_VISUALS = [
+  {
+    title: "Cosmic Event Horizon",
+    video: "/media/cosmic-portal.mp4",
+    gif: "/media/cosmic-portal.gif",
+    tag: "COSMOS_PORTAL",
+  },
+  {
+    title: "Dither Cyber Companion",
+    video: "/media/dither-cat.mp4",
+    gif: "/media/dither-cat.gif",
+    tag: "AI_MASCOT",
+  },
+  {
+    title: "Glitch Telemetry HUD",
+    video: "/media/glitch-eyes.mp4",
+    gif: "/media/glitch-eyes.gif",
+    tag: "RETRO_OS",
+  },
 ];
 
 export default function Hero() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [visualIndex, setVisualIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % roleItems.length);
-    }, 3200);
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 2800);
     return () => clearInterval(interval);
   }, []);
 
-  const currentItem = roleItems[currentIndex];
+  const nextVisual = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    sounds.playMinecraftPop();
+    setVisualIndex((prev) => (prev + 1) % HERO_VISUALS.length);
+  };
+
+  const currentVisual = HERO_VISUALS[visualIndex];
 
   return (
     <section
       id="hero"
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-16"
+      className="relative flex min-h-[100dvh] flex-col justify-start md:justify-center px-6 md:px-12 lg:px-20 pt-32 sm:pt-36 pb-16"
     >
-      {/* Ambient background glow orbs */}
-      <div className="pointer-events-none absolute left-1/4 top-1/4 h-[500px] w-[500px] rounded-full bg-white/[0.015] blur-[140px]" />
-      <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-[400px] w-[400px] rounded-full bg-white/[0.015] blur-[120px]" />
+      {/* Subtle ambient lighting */}
+      <div className="pointer-events-none absolute left-1/4 top-1/4 h-[550px] w-[550px] rounded-full bg-[#d4a843]/[0.02] blur-[150px]" />
+      <div className="pointer-events-none absolute right-1/4 bottom-1/4 h-[500px] w-[500px] rounded-full bg-[#22c55e]/[0.015] blur-[160px]" />
 
-      <div className="relative z-10 flex max-w-4xl flex-col items-center text-center">
-        {/* Availability Status Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 backdrop-blur-md"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#06d6a0] opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#06d6a0]" />
-          </span>
-          <span className="text-xs font-medium tracking-wide text-[#bbb]">
-            Open to internships &amp; interesting engineering problems
-          </span>
-        </motion.div>
-
-        {/* Name Title - Clean, crisp, high-contrast typography matching the site theme */}
-        <motion.h1
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="my-3 font-display text-[clamp(2.75rem,8.5vw,5.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] select-none text-white"
-        >
-          PARTH{" "}
-          <span className="bg-gradient-to-b from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-            KHANSALI
-          </span>
-        </motion.h1>
-
-        {/* Dynamic Role Ticker - Unified Tactile Pill with Exact Fixed Spacing & Fluid Spring Layout */}
-        <motion.div
-          layout
-          transition={{ layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-          className="mt-2 mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-1.5 shadow-[0_2px_15px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all hover:border-white/20"
-        >
-          <span className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
+      <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-14">
+        {/* Left Column: Name, Role, Bio, Actions */}
+        <div className="max-w-xl">
+          {/* Location & availability line */}
+          <div className="mb-6 flex items-center gap-2.5 text-sm text-[#8a8a7a]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#22c55e] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22c55e]" />
             </span>
-            Role
-          </span>
-          <span className="h-3 w-[1px] bg-white/15 select-none" />
-          <div className="relative h-[1.4em] overflow-hidden flex items-center">
-            <AnimatePresence mode="popLayout" initial={false}>
-              <motion.span
-                key={currentItem.role}
-                initial={{ y: 14, opacity: 0, filter: "blur(4px)" }}
-                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                exit={{ y: -14, opacity: 0, filter: "blur(4px)" }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="whitespace-nowrap font-mono text-xs md:text-sm font-semibold tracking-wide text-zinc-100"
-              >
-                {currentItem.role}
-              </motion.span>
-            </AnimatePresence>
+            <span>Dehradun, India · Currently taking on interesting problems</span>
           </div>
-        </motion.div>
 
-        {/* Main Headline */}
-        <motion.h2
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="mb-3 max-w-2xl font-display text-2xl font-bold tracking-tight text-white md:text-3xl"
-        >
-          I build things I wish already existed.
-        </motion.h2>
+          {/* Name — large, left-aligned, confident */}
+          <h1 className="font-display text-[clamp(3.2rem,7.5vw,5.5rem)] font-bold leading-[0.92] tracking-tight text-[#f0ece4]">
+            Parth
+            <br />
+            Khansali
+          </h1>
 
-        {/* Rotating Supporting Thought */}
-        <div className="h-7 mb-6 overflow-hidden flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={currentItem.line}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="text-xs md:text-sm font-medium italic text-[#888]"
+          {/* Rotating role — inline, subtle */}
+          <div className="mt-4 flex items-baseline gap-3">
+            <span className="text-sm text-[#6a6a5e]">/</span>
+            <div className="relative h-[1.5em] overflow-hidden">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={roles[roleIndex]}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -20, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  className="block text-lg font-medium text-[#b5b0a1]"
+                >
+                  {roles[roleIndex]}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Bio — direct, honest */}
+          <p className="mt-8 text-[15px] leading-[1.7] text-[#8a8a7a]">
+            CS undergrad in Dehradun who codes past midnight more often than
+            I'd like to admit. I take half-formed ideas, figure out what
+            actually matters, and ship software people end up relying on.
+          </p>
+
+          {/* Actions */}
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <a
+              href="#projects"
+              onClick={() => sounds.playMinecraftPop()}
+              className="group inline-flex items-center gap-2.5 rounded-lg bg-[#f0ece4] px-7 py-3.5 text-sm font-semibold text-[#121210] transition-all duration-200 hover:bg-white active:scale-[0.97]"
             >
-              &ldquo;{currentItem.line}&rdquo;
-            </motion.p>
-          </AnimatePresence>
+              <span>See my work</span>
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </a>
+
+            <a
+              href="#about"
+              onClick={() => sounds.playMinecraftPop()}
+              className="inline-flex items-center gap-2 rounded-lg border border-[#333328] px-6 py-3.5 text-sm font-medium text-[#b5b0a1] transition-all duration-200 hover:border-[#555548] hover:text-[#f0ece4]"
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>About me</span>
+            </a>
+          </div>
+
+          {/* Social links */}
+          <div className="mt-10 flex items-center gap-1">
+            <SocialLink href="https://github.com/ParthKhansali" label="GitHub" icon={GithubIcon} />
+            <SocialLink href="https://linkedin.com/in/parth-khansali" label="LinkedIn" icon={LinkedinIcon} />
+            <SocialLink href="mailto:parthkhansali@gmail.com" label="Email" icon={Mail} />
+            <SocialLink href="https://instagram.com/parth_khansali" label="Instagram" icon={InstagramIcon} />
+          </div>
         </div>
 
-        {/* Hero Description */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mb-10 max-w-2xl space-y-3 text-sm leading-relaxed text-[#999] md:text-base text-center"
+        {/* Right Column: Cosmic Visual Showcase & Telemetry Deck */}
+        <div
+          className="w-full lg:max-w-[420px] flex flex-col rounded-2xl border border-[#2b2b24] bg-[#141412]/90 backdrop-blur-md shadow-2xl overflow-hidden select-none"
         >
-          <p>
-            I&apos;m Parth — a Computer Science student at Graphic Era Hill University. I like taking rough ideas, figuring out what actually matters, and turning them into software that feels good to use.
-          </p>
-          <p className="text-[#777]">
-            I&apos;m strongest on the product side of engineering, but I like knowing what&apos;s happening underneath the screen too — from APIs and databases to systems, deployment and the occasional bug that refuses to explain itself.
-          </p>
-        </motion.div>
+          {/* Header Bar */}
+          <div className="flex items-center justify-between px-4 py-2.5 bg-[#171714] border-b border-[#2b2b24] text-xs">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-[#22c55e]" />
+              <span className="font-mono text-[11px] font-semibold text-[#f0ece4]">
+                parth.craft · sys_deck
+              </span>
+            </div>
 
-        {/* Tactile Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-12 flex flex-wrap items-center justify-center gap-4"
-        >
-          {/* Primary CTA: See what I'm building */}
-          <a
-            href="#projects"
-            className="group inline-flex items-center gap-2.5 rounded-full border border-transparent bg-[#4361ee] px-7 py-3.5 text-sm font-medium text-white shadow-[0_0_25px_rgba(67,97,238,0.3)] transition-all duration-300 hover:bg-[#3451d1] hover:shadow-[0_0_35px_rgba(67,97,238,0.5)] hover:scale-105"
-          >
-            See what I&apos;m building
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+            <button
+              type="button"
+              onClick={nextVisual}
+              title="Cycle video visual loop"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#2b2b24] bg-[#121210] hover:border-[#d4a843]/50 text-[10px] font-mono text-[#8a8a7a] hover:text-[#f0ece4] transition-colors cursor-pointer"
+            >
+              <RotateCw className="h-3 w-3" />
+              <span>Cycle Loop</span>
+            </button>
+          </div>
 
-          {/* Secondary CTA: Read my story */}
-          <a
-            href="#about"
-            className="btn-tactile group inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.05] px-7 py-3.5 text-sm font-medium text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:border-[#4361ee]"
-          >
-            <span className="btn-fill" />
-            <span className="btn-content flex items-center gap-2">
-              <BookOpen className="h-4 w-4 btn-icon" />
-              Read my story
-            </span>
-          </a>
-        </motion.div>
+          {/* Looping Visual Showcase */}
+          <div className="relative h-56 sm:h-60 w-full overflow-hidden bg-[#0c0c0a]">
+            <video
+              ref={videoRef}
+              key={currentVisual.video}
+              src={asset(currentVisual.video)}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover opacity-90 transition-opacity duration-300"
+            />
 
-        {/* Social Icons Dock */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
-          className="flex items-center gap-3"
-        >
-          <SocialIcon
-            href="https://github.com/ParthKhansali"
-            label="GitHub"
-            icon={GithubIcon}
-          />
-          <SocialIcon
-            href="https://linkedin.com/in/parth-khansali"
-            label="LinkedIn"
-            icon={LinkedinIcon}
-          />
-          <SocialIcon
-            href="mailto:parthkhansali@gmail.com"
-            label="Email"
-            icon={Mail}
-          />
-          <SocialIcon
-            href="https://instagram.com/parth_khansali"
-            label="Instagram"
-            icon={InstagramIcon}
-          />
-        </motion.div>
+            {/* Scanline & Vignette Overlay */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#141412] via-transparent to-transparent opacity-90" />
+
+            {/* Overlay Chip */}
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-md border border-white/10 bg-black/60 backdrop-blur-sm px-2 py-0.5 text-[10px] font-mono text-[#f0ece4]">
+              <Sparkles className="h-3 w-3 text-[#d4a843]" />
+              <span>{currentVisual.tag}</span>
+            </div>
+
+            {/* Bottom Caption inside Video */}
+            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs">
+              <span className="font-medium text-[#f0ece4] drop-shadow-md">
+                {currentVisual.title}
+              </span>
+              <span className="text-[10px] font-mono text-[#8a8a7a]">
+                0{visualIndex + 1} / 0{HERO_VISUALS.length}
+              </span>
+            </div>
+          </div>
+
+          {/* Engineering Telemetry Section */}
+          <div className="p-4 space-y-3 bg-[#141412]">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="p-2.5 rounded-xl border border-[#2b2b24] bg-[#171714]">
+                <span className="text-[10px] font-mono uppercase text-[#7a7a6b] block">Flagship</span>
+                <span className="font-semibold text-[#f0ece4] block mt-0.5 truncate">GEHU Connect</span>
+                <span className="text-[10px] text-[#22c55e] font-mono">1,800+ Users</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl border border-[#2b2b24] bg-[#171714]">
+                <span className="text-[10px] font-mono uppercase text-[#7a7a6b] block">Throughput</span>
+                <span className="font-semibold text-[#f0ece4] block mt-0.5 truncate">Kafka Stream</span>
+                <span className="text-[10px] text-[#d4a843] font-mono">10k msgs/sec</span>
+              </div>
+            </div>
+
+            {/* Current Focus Strip */}
+            <div className="p-2.5 rounded-xl border border-[#2b2b24] bg-[#121210] flex items-center justify-between text-xs">
+              <div className="min-w-0 pr-2">
+                <span className="text-[10px] font-mono uppercase text-[#7a7a6b] block">Core Focus</span>
+                <span className="text-xs text-[#c5c2b8] truncate block">
+                  Distributed Systems &amp; Full-Stack Apps
+                </span>
+              </div>
+              <span className="h-2 w-2 rounded-full bg-[#22c55e] flex-shrink-0" />
+            </div>
+
+            {/* Quick Interactive Portals */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  sounds.playMinecraftPop();
+                  window.dispatchEvent(new CustomEvent("open-arcade"));
+                }}
+                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-[#2b2b24] bg-[#171714] hover:border-[#d4a843]/50 text-xs font-medium text-[#f0ece4] transition-colors cursor-pointer"
+              >
+                <Gamepad2 className="h-3.5 w-3.5 text-[#d4a843]" />
+                <span>Open Lounge</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  sounds.playMinecraftPop();
+                  window.dispatchEvent(new CustomEvent("open-resume-modal"));
+                }}
+                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-[#2b2b24] bg-[#171714] hover:border-white/30 text-xs font-medium text-[#f0ece4] transition-colors cursor-pointer"
+              >
+                <FileText className="h-3.5 w-3.5 text-[#8a8a7a]" />
+                <span>View CV</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Scroll indicator with exact text: THERE'S MORE DOWN HERE ↓ */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-5 left-1/2 -translate-x-1/2"
-      >
+      {/* Scroll prompt — bottom left */}
+      <div className="absolute bottom-4 left-6 md:left-12 lg:left-20">
         <a
           href="#portal-marquee"
           aria-label="Scroll down"
-          className="flex flex-col items-center gap-1.5 text-[11px] font-mono tracking-wider uppercase text-[#666] transition-colors hover:text-white"
+          className="text-[11px] tracking-wider text-[#555548] transition-colors hover:text-[#b5b0a1]"
         >
-          <span>THERE&apos;S MORE DOWN HERE ↓</span>
+          keep going &darr;
         </a>
-      </motion.div>
+      </div>
     </section>
   );
 }
 
-function SocialIcon({
+function SocialLink({
   href,
   label,
   icon: Icon,
@@ -228,9 +283,10 @@ function SocialIcon({
       target={href.startsWith("http") ? "_blank" : undefined}
       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
       aria-label={label}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.02] text-[#888] transition-all duration-300 hover:border-[#4361ee]/40 hover:bg-[#4361ee]/10 hover:text-white hover:scale-105"
+      onMouseEnter={() => sounds.playClick(800, 0.02)}
+      className="flex h-10 w-10 items-center justify-center text-[#6a6a5e] transition-colors duration-200 hover:text-[#f0ece4]"
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="h-[18px] w-[18px]" />
     </a>
   );
 }

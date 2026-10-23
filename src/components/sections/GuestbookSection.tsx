@@ -26,15 +26,14 @@ export default function GuestbookSection() {
   const [, startTransition] = useTransition();
 
   // Google User Auth
-  const [googleUser, setGoogleUser] = useState<GoogleUser | null>(() => {
-    if (typeof window === "undefined") return null;
+  const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
+
+  useEffect(() => {
     try {
       const saved = localStorage.getItem("pk_google_user");
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
+      if (saved) setGoogleUser(JSON.parse(saved));
+    } catch {}
+  }, []);
 
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
@@ -174,7 +173,7 @@ export default function GuestbookSection() {
   return (
     <section
       id="guestbook"
-      className="relative bg-[#050505] py-24 px-6 border-t border-white/[0.04] scroll-mt-24"
+      className="relative bg-[#0f0f0d] py-24 px-6 border-t border-[#f0ece4]/[0.06] scroll-mt-24"
       aria-label="Community Guestbook"
     >
       <div className="mx-auto max-w-2xl">
@@ -182,22 +181,22 @@ export default function GuestbookSection() {
         <div className="flex items-baseline justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-display text-2xl font-bold tracking-tight text-white">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-[#f0ece4]">
                 Say hi
               </h2>
               {reviews.length > 0 && (
-                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[10px] font-mono text-neutral-400">
+                <span className="rounded-full border border-[#f0ece4]/10 bg-[#f0ece4]/[0.04] px-2.5 py-0.5 text-[10px] font-mono text-[#8a8a7a]">
                   {reviews.length} {reviews.length === 1 ? "note" : "notes"}
                 </span>
               )}
             </div>
-            <p className="mt-1 text-xs sm:text-sm text-neutral-400">
+            <p className="mt-1 text-xs sm:text-sm text-[#8a8a7a]">
               You&apos;ve made it this far. Leave a little evidence.
             </p>
           </div>
 
           {/* Discreet Live View Counter */}
-          <div className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
+          <div className="flex items-center gap-1.5 text-xs font-mono text-[#8a8a7a]">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#06d6a0] opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#06d6a0]" />
@@ -209,19 +208,19 @@ export default function GuestbookSection() {
         </div>
 
         {/* Input Composer / Sign In Prompt */}
-        <div className="mb-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 transition-colors focus-within:border-white/20">
+        <div className="mb-8 rounded-2xl border border-[#f0ece4]/[0.08] bg-[#f0ece4]/[0.02] p-4 transition-colors focus-within:border-[#f0ece4]/20">
           {!googleUser ? (
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-[#4285F4]" />
-                <span className="text-xs sm:text-sm text-neutral-400">
+                <span className="text-xs sm:text-sm text-[#8a8a7a]">
                   Want to leave a note? Sign in with Google.
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setIsSignInOpen(true)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.06] hover:bg-white/[0.1] px-4 py-2 text-xs font-medium text-white transition-all cursor-pointer hover:border-white/25 shadow-sm"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#f0ece4]/15 bg-[#f0ece4]/[0.06] hover:bg-[#f0ece4]/[0.1] px-4 py-2 text-xs font-medium text-[#f0ece4] transition-all cursor-pointer hover:border-[#f0ece4]/25 shadow-sm"
               >
                 {/* Minimal Google 'G' icon */}
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24">
@@ -248,9 +247,9 @@ export default function GuestbookSection() {
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               {/* Authenticated User Status Bar */}
-              <div className="flex items-center justify-between text-xs pb-2 border-b border-white/[0.04]">
+              <div className="flex items-center justify-between text-xs pb-2 border-b border-[#f0ece4]/[0.04]">
                 <div className="flex items-center gap-2">
-                  <div className="relative h-6 w-6 rounded-full overflow-hidden border border-white/10 bg-white/[0.05]">
+                  <div className="relative h-6 w-6 rounded-full overflow-hidden border border-[#f0ece4]/10 bg-[#f0ece4]/[0.05]">
                     <Image
                       src={googleUser.picture || asset("/profile.jpg")}
                       alt={googleUser.name}
@@ -260,7 +259,7 @@ export default function GuestbookSection() {
                       unoptimized
                     />
                   </div>
-                  <span className="font-medium text-neutral-200">{googleUser.name}</span>
+                  <span className="font-medium text-[#c5c2b8]">{googleUser.name}</span>
                   <span className="text-[10px] font-mono text-[#06d6a0] bg-[#06d6a0]/10 px-2 py-0.2 rounded-full border border-[#06d6a0]/20">
                     Google Verified
                   </span>
@@ -269,7 +268,7 @@ export default function GuestbookSection() {
                 <button
                   type="button"
                   onClick={handleSignOut}
-                  className="flex items-center gap-1 text-[11px] text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer"
+                  className="flex items-center gap-1 text-[11px] text-[#6a6a5e] hover:text-[#b5b0a1] transition-colors cursor-pointer"
                   title="Sign out"
                 >
                   <LogOut className="h-3 w-3" />
@@ -286,19 +285,19 @@ export default function GuestbookSection() {
                 rows={2}
                 maxLength={400}
                 required
-                className="w-full resize-none rounded-lg bg-transparent text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-hidden leading-relaxed"
+                className="w-full resize-none rounded-lg bg-transparent text-xs sm:text-sm text-[#f0ece4] placeholder-[#6a6a5e] focus:outline-hidden leading-relaxed"
               />
 
               {/* Action Bar */}
-              <div className="flex items-center justify-between pt-1 border-t border-white/[0.04]">
-                <span className="text-[10px] font-mono text-neutral-600">
+              <div className="flex items-center justify-between pt-1 border-t border-[#f0ece4]/[0.04]">
+                <span className="text-[10px] font-mono text-[#555548]">
                   {message.length > 0 ? `${message.length}/400 · ` : ""}⌘ + Enter to send
                 </span>
 
                 <button
                   type="submit"
                   disabled={isSubmitting || !message.trim()}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-white text-black hover:bg-neutral-200 px-3.5 py-1.5 text-xs font-semibold transition-all disabled:opacity-40 cursor-pointer shadow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#f0ece4] text-[#0f0f0d] hover:bg-white px-3.5 py-1.5 text-xs font-semibold transition-all disabled:opacity-40 cursor-pointer shadow-sm"
                 >
                   {isSubmitting ? (
                     <>
@@ -331,26 +330,26 @@ export default function GuestbookSection() {
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-16 rounded-xl bg-white/[0.02] border border-white/[0.04] animate-pulse"
+                  className="h-16 rounded-xl bg-[#f0ece4]/[0.02] border border-[#f0ece4]/[0.04] animate-pulse"
                 />
               ))}
             </div>
           ) : reviews.length === 0 ? (
-            <div className="py-12 text-center rounded-2xl border border-white/[0.04] bg-white/[0.01] p-8">
-              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03]">
-                <PenLine className="h-4 w-4 text-neutral-400" />
+            <div className="py-12 text-center rounded-2xl border border-[#f0ece4]/[0.04] bg-[#f0ece4]/[0.01] p-8">
+              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-[#f0ece4]/10 bg-[#f0ece4]/[0.03]">
+                <PenLine className="h-4 w-4 text-[#8a8a7a]" />
               </div>
-              <p className="text-sm font-medium text-neutral-300">No notes yet. You could be first.</p>
+              <p className="text-sm font-medium text-[#b5b0a1]">No notes yet. You could be first.</p>
             </div>
           ) : (
             displayedReviews.map((entry) => (
               <div
                 key={entry.id}
-                className="group rounded-xl border border-white/[0.04] bg-white/[0.015] hover:bg-white/[0.03] p-4 transition-colors"
+                className="group rounded-xl border border-[#f0ece4]/[0.04] bg-[#f0ece4]/[0.015] hover:bg-[#f0ece4]/[0.03] p-4 transition-colors"
               >
                 <div className="flex items-center justify-between gap-2 mb-1.5">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="relative h-6 w-6 rounded-full overflow-hidden border border-white/10 bg-white/[0.05] flex-shrink-0">
+                    <div className="relative h-6 w-6 rounded-full overflow-hidden border border-[#f0ece4]/10 bg-[#f0ece4]/[0.05] flex-shrink-0">
                       <Image
                         src={entry.avatar}
                         alt={entry.name}
@@ -360,12 +359,12 @@ export default function GuestbookSection() {
                         unoptimized
                       />
                     </div>
-                    <span className="text-xs font-medium text-neutral-200 truncate">
+                    <span className="text-xs font-medium text-[#c5c2b8] truncate">
                       {entry.name}
                     </span>
                   </div>
 
-                  <span className="text-[10px] font-mono text-neutral-500 flex-shrink-0">
+                  <span className="text-[10px] font-mono text-[#6a6a5e] flex-shrink-0">
                     {new Date(entry.createdAt).toLocaleDateString(undefined, {
                       month: "short",
                       day: "numeric",
@@ -374,7 +373,7 @@ export default function GuestbookSection() {
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed break-words pl-8">
+                <p className="text-xs sm:text-sm text-[#b5b0a1] leading-relaxed break-words pl-8">
                   {entry.message}
                 </p>
               </div>
@@ -391,7 +390,7 @@ export default function GuestbookSection() {
                   prev >= reviews.length ? 4 : Math.min(reviews.length, prev + 5)
                 )
               }
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 px-5 py-2 text-xs font-medium text-neutral-300 hover:text-white transition-all cursor-pointer backdrop-blur-md"
+              className="inline-flex items-center gap-2 rounded-full border border-[#f0ece4]/10 bg-[#f0ece4]/[0.03] hover:bg-[#f0ece4]/[0.06] hover:border-[#f0ece4]/20 px-5 py-2 text-xs font-medium text-[#b5b0a1] hover:text-[#f0ece4] transition-all cursor-pointer backdrop-blur-md"
             >
               {visibleCount >= reviews.length ? (
                 <>
@@ -411,10 +410,10 @@ export default function GuestbookSection() {
 
       {/* Clean Minimal Google Auth Dialog */}
       {isSignInOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
-          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#0c0c0e] p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f0d]/85 backdrop-blur-md p-4">
+          <div className="w-full max-w-sm rounded-2xl border border-[#f0ece4]/10 bg-[#141412] p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-display text-sm font-bold text-white flex items-center gap-2">
+              <h3 className="font-display text-sm font-bold text-[#f0ece4] flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-[#4285F4]" />
                 <span>Sign in to leave a note</span>
               </h3>
@@ -424,14 +423,14 @@ export default function GuestbookSection() {
                   setIsSignInOpen(false);
                   setAuthError(null);
                 }}
-                className="text-neutral-500 hover:text-white text-xs cursor-pointer p-1"
+                className="text-[#6a6a5e] hover:text-[#f0ece4] text-xs cursor-pointer p-1"
                 aria-label="Close"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-neutral-400 mb-5 leading-relaxed">
+            <p className="text-xs text-[#8a8a7a] mb-5 leading-relaxed">
               A quick Google sign-in connects your verified name and picture so notes remain authentic and bot-free.
             </p>
 
@@ -440,11 +439,11 @@ export default function GuestbookSection() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={isSigningIn}
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/20 bg-white hover:bg-neutral-100 text-black py-2.5 px-4 text-xs font-semibold transition-all cursor-pointer shadow-sm disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#f0ece4]/20 bg-[#f0ece4] hover:bg-white text-[#0f0f0d] py-2.5 px-4 text-xs font-semibold transition-all cursor-pointer shadow-sm disabled:opacity-60"
               >
                 {isSigningIn ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin text-black" />
+                    <Loader2 className="h-4 w-4 animate-spin text-[#0f0f0d]" />
                     <span>Connecting with Google...</span>
                   </>
                 ) : (
@@ -480,7 +479,7 @@ export default function GuestbookSection() {
                 </div>
               )}
 
-              <p className="text-center text-[10px] text-neutral-500 pt-1">
+              <p className="text-center text-[10px] text-[#6a6a5e] pt-1">
                 Powered by Firebase Auth · Your email is never shown publicly
               </p>
             </div>

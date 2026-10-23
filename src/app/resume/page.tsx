@@ -20,7 +20,7 @@ const education = [
     degree: "Bachelor of Technology in Computer Science and Engineering",
     institution: "Graphic Era Hill University",
     location: "Dehradun, Uttarakhand",
-    period: "2024 – 2028",
+    period: "2024 - 2028",
     details: "CGPA of 7.6",
   },
   {
@@ -41,7 +41,7 @@ const education = [
 
 const projectsItems = [
   {
-    title: "GEHU Connect – Student Community & Networking Platform",
+    title: "GEHU Connect: Student Community & Networking Platform",
     tech: "Java, Spring Boot, React Native, Expo, Cloudflare R2, AWS SDK",
     period: "2026",
     bullets: [
@@ -52,7 +52,7 @@ const projectsItems = [
     ],
   },
   {
-    title: "OmniMentor – Anticipatory AI Classroom OS",
+    title: "OmniMentor: Anticipatory AI Classroom OS",
     tech: "Next.js, React.js, Node.js, Python, AI APIs",
     period: "2026",
     bullets: [
@@ -63,7 +63,7 @@ const projectsItems = [
     ],
   },
   {
-    title: "AutoHire – AI-Powered Hiring Platform",
+    title: "AutoHire: AI-Powered Hiring Platform",
     tech: "Node.js, Kafka, Zookeeper, MongoDB",
     period: "2025",
     bullets: [
@@ -87,7 +87,7 @@ const experienceItems = [
   {
     role: "Host & Organizer",
     org: "University Model United Nations Conferences",
-    period: "2025 – 2026",
+    period: "2025 - 2026",
     bullets: [
       "Successfully organized and hosted multiple Model United Nations conferences, overseeing event logistics, committee operations, and participant engagement.",
     ],
@@ -101,9 +101,9 @@ const experienceItems = [
     ],
   },
   {
-    role: "Delegate Experience – International Relations & Debate",
+    role: "Delegate Experience: International Relations & Debate",
     org: "UNGA DISEC, IOC & Global Committees",
-    period: "2024 – Present",
+    period: "2024 - Present",
     bullets: [
       "Represented countries including Pakistan, Switzerland, and Mexico across committees such as UNGA DISEC and IOC, strengthening skills in public speaking, negotiation, research, and leadership.",
     ],

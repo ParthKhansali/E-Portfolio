@@ -27,7 +27,7 @@ export default function StarfieldCanvas() {
     let height = (canvas.height = window.innerHeight);
 
     const stars: Star[] = [];
-    const STAR_COUNT = 130;
+    const STAR_COUNT = 70;
 
     for (let i = 0; i < STAR_COUNT; i++) {
       const baseAlpha = Math.random() * 0.6 + 0.15;
@@ -65,7 +65,7 @@ export default function StarfieldCanvas() {
           star.phase += star.twinkleSpeed;
           star.alpha = star.baseAlpha + Math.sin(star.phase) * (star.baseAlpha * 0.4);
 
-          ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, star.alpha)})`;
+          ctx.fillStyle = `rgba(240, 236, 228, ${Math.max(0, star.alpha)})`;
           ctx.beginPath();
           ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
           ctx.fill();
@@ -88,7 +88,7 @@ export default function StarfieldCanvas() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[1] h-full w-full opacity-60"
+      className="pointer-events-none fixed inset-0 z-[1] h-full w-full opacity-35"
     />
   );
 }
