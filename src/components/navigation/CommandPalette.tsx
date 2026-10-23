@@ -132,6 +132,7 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const filteredItems = items.filter(
     (item) =>
@@ -163,14 +164,42 @@ export default function CommandPalette() {
     };
   }, []);
 
+  // Lock Lenis smooth scroll and document body scroll when command palette is open
   useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        inputRef.current?.focus();
-      }, 50);
-      return () => clearTimeout(timer);
+    if (!isOpen) return;
+
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    lenis?.stop();
+
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     }
+
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+
+    return () => {
+      clearTimeout(timer);
+      lenis?.start();
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
   }, [isOpen]);
+
+  // Keep selected item visible while navigating via Arrow keys
+  useEffect(() => {
+    if (!listRef.current) return;
+    const activeItem = listRef.current.querySelector<HTMLElement>(`[data-index="${selectedIndex}"]`);
+    if (activeItem) {
+      activeItem.scrollIntoView({ block: "nearest" });
+    }
+  }, [selectedIndex]);
 
   const handleSelect = (item: SearchItem) => {
     setIsOpen(false);
@@ -219,7 +248,11 @@ export default function CommandPalette() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[999999] flex items-start justify-center pt-20 sm:pt-28 px-4">
+        <div
+          data-lenis-prevent="true"
+          onWheel={(e) => e.stopPropagation()}
+          className="fixed inset-0 z-[999999] flex items-start justify-center pt-20 sm:pt-28 px-4"
+        >
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -235,6 +268,8 @@ export default function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2 }}
+            data-lenis-prevent="true"
+            onWheel={(e) => e.stopPropagation()}
             className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-[#333328] bg-[#171714] shadow-[0_25px_70px_rgba(0,0,0,0.9)] z-10"
           >
             {/* Input Header */}
@@ -266,7 +301,12 @@ export default function CommandPalette() {
             </div>
 
             {/* Results List */}
-            <div className="max-h-[340px] overflow-y-auto p-2 space-y-1">
+            <div
+              ref={listRef}
+              data-lenis-prevent="true"
+              onWheel={(e) => e.stopPropagation()}
+              className="command-results-scroll max-h-[340px] overflow-y-auto overscroll-contain p-2 space-y-1"
+            >
               {filteredItems.length > 0 ? (
                 filteredItems.map((item, index) => {
                   const Icon = item.icon;
@@ -275,6 +315,10 @@ export default function CommandPalette() {
                   return (
                     <div
                       key={item.id}
+                      data-index={index}
+                      data-cursor="pointer"
+                      role="button"
+                      tabIndex={0}
                       onClick={() => handleSelect(item)}
                       onMouseEnter={() => setSelectedIndex(index)}
                       className={`flex cursor-pointer items-center justify-between rounded-xl px-3.5 py-2.5 transition-all ${
