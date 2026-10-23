@@ -164,18 +164,17 @@ export default function CommandPalette() {
     };
   }, []);
 
-  // Lock Lenis smooth scroll and document body scroll when command palette is open
+  // Lock background page scroll without disabling Lenis wheel events globally
   useEffect(() => {
     if (!isOpen) return;
 
-    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
-    lenis?.stop();
-
-    const originalOverflow = document.body.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalDocOverflow = document.documentElement.style.overflow;
     const originalPaddingRight = document.body.style.paddingRight;
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
       document.body.style.paddingRight = `${scrollbarWidth}px`;
     }
@@ -186,8 +185,8 @@ export default function CommandPalette() {
 
     return () => {
       clearTimeout(timer);
-      lenis?.start();
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalDocOverflow;
       document.body.style.paddingRight = originalPaddingRight;
     };
   }, [isOpen]);
@@ -250,7 +249,13 @@ export default function CommandPalette() {
       {isOpen && (
         <div
           data-lenis-prevent="true"
-          onWheel={(e) => e.stopPropagation()}
+          onWheel={(e) => {
+            const target = e.target as HTMLElement;
+            if (!target.closest(".command-results-scroll")) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
           className="fixed inset-0 z-[999999] flex items-start justify-center pt-20 sm:pt-28 px-4"
         >
           {/* Backdrop */}
@@ -269,7 +274,6 @@ export default function CommandPalette() {
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2 }}
             data-lenis-prevent="true"
-            onWheel={(e) => e.stopPropagation()}
             className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-[#333328] bg-[#171714] shadow-[0_25px_70px_rgba(0,0,0,0.9)] z-10"
           >
             {/* Input Header */}
@@ -285,7 +289,7 @@ export default function CommandPalette() {
                 }}
                 onKeyDown={handleInputKeyDown}
                 placeholder="Search projects, skills, notes, or actions..."
-                className="w-full bg-transparent text-sm text-[#f0ece4] placeholder-[#7a7a6b] outline-none"
+                className="w-full bg-transparent text-sm text-[#f0ece4] placeholder-[#7a7a6b] outline-none cursor-text select-text"
               />
               {query && (
                 <button

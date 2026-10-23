@@ -14,14 +14,8 @@ export interface LoungeMessage {
   timestamp: number;
 }
 
-export interface LeaderboardEntry {
-  id: string;
-  player: string;
-  avatar: string;
-  score: number;
-  date: string;
-  game: "runner" | "snake" | "pong" | "reflex" | "skribbl";
-}
+import { LeaderboardEntry } from "@/components/effects/lounge/types";
+export type { LeaderboardEntry };
 
 interface LoungeVisitor {
   id: string;

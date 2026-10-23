@@ -74,7 +74,28 @@ export default function Navbar() {
     return () => window.removeEventListener("resume-modal-state", handleModalState as EventListener);
   }, []);
 
+  // Lock scroll and Lenis when mobile drawer is open
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    lenis?.stop();
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      lenis?.start();
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileOpen]);
+
   const triggerSearch = () => {
+    setMobileOpen(false);
     window.dispatchEvent(new CustomEvent("open-command-palette"));
   };
 
@@ -97,10 +118,10 @@ export default function Navbar() {
               ? "border-[#3e3e34] bg-[#141412]/92 shadow-[0_12px_40px_rgba(0,0,0,0.7)]"
               : "border-[#333328]/70 bg-[#141412]/80"
           }`}
-          style={{ minWidth: "min(100%, 680px)" }}
+          style={{ width: "min(100%, 680px)" }}
         >
           {/* Integrated Magnetic Profile Avatar with Discord Pulse Dot */}
-          <div ref={pfpRef} className="relative flex items-center select-none">
+          <div ref={pfpRef} className="relative flex items-center select-none flex-shrink-0">
             <motion.div
               style={{ x: smoothX, y: smoothY }}
               whileTap={{ scale: 0.94 }}
@@ -144,7 +165,7 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={href}
-                  className="px-3 py-1 text-xs font-medium text-[#8a8a7a] transition-colors hover:text-[#f0ece4]"
+                  className="px-3.5 py-1 text-xs font-medium text-[#8a8a7a] transition-colors hover:text-[#f0ece4]"
                 >
                   {link.label}
                 </a>
@@ -153,12 +174,12 @@ export default function Navbar() {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {/* Search */}
             <button
               onClick={triggerSearch}
               title="Quick Search (Cmd+K)"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-[#8a8a7a] transition-colors hover:text-[#f0ece4]"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-[#8a8a7a] transition-colors hover:text-[#f0ece4] cursor-pointer"
             >
               <Search className="h-3.5 w-3.5" />
               <span className="hidden sm:inline-block">Search</span>
@@ -171,7 +192,7 @@ export default function Navbar() {
             <button
               onClick={toggleAssistant}
               title={assistantMode === "cat" ? "Let the cat sleep" : "Wake the cat"}
-              className={`flex h-8 w-8 items-center justify-center rounded-full transition-all ${
+              className={`flex h-8 w-8 items-center justify-center rounded-full transition-all cursor-pointer ${
                 assistantMode === "cat"
                   ? "text-[#d4a843]"
                   : "text-[#6a6a5e] hover:text-[#f0ece4]"
@@ -180,7 +201,7 @@ export default function Navbar() {
               <Cat className="h-4 w-4" />
             </button>
 
-            {/* Resume */}
+            {/* Resume (Desktop) */}
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent("open-resume-modal"))}
@@ -195,9 +216,9 @@ export default function Navbar() {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle navigation"
-              className="flex h-8 w-8 items-center justify-center text-[#f0ece4] md:hidden"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#333328] bg-[#1a1a16] text-[#f0ece4] md:hidden hover:bg-[#252520] transition-colors cursor-pointer"
             >
-              {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4 text-[#f0ece4]" />}
             </button>
           </div>
         </nav>
@@ -207,33 +228,72 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[998] flex flex-col items-center justify-center bg-[#0f0f0d]/97 px-6 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1001] flex flex-col bg-[#0f0f0d]/98 backdrop-blur-2xl md:hidden overflow-y-auto"
           >
-            <div className="flex flex-col items-center gap-6 text-center">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={`#${link.id}`}
-                  onClick={() => setMobileOpen(false)}
-                  className="font-display text-2xl font-bold tracking-tight text-[#f0ece4] transition-colors hover:text-[#d4a843]"
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-6 pt-[max(1.2rem,env(safe-area-inset-top))] pb-4 border-b border-[#2b2b24]">
+              <div className="flex items-center gap-2.5">
+                <div className="h-7 w-7 rounded-full overflow-hidden border border-[#333328]">
+                  <Image
+                    src={asset("/profile.jpg")}
+                    alt="Parth Khansali"
+                    width={28}
+                    height={28}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <span className="font-display text-sm font-bold tracking-wider text-[#f0ece4] uppercase">
+                  Parth Khansali
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#333328] bg-[#1a1a16] text-[#8a8a7a] hover:text-[#f0ece4]"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Nav Links */}
+            <div className="flex flex-col items-start px-8 py-8 gap-5 flex-1">
+              {navLinks.map((link) => {
+                const href = isHome ? `#${link.id}` : `/#${link.id}`;
+                return (
+                  <a
+                    key={link.label}
+                    href={href}
+                    onClick={() => setMobileOpen(false)}
+                    className="font-display text-xl font-bold tracking-tight text-[#f0ece4] transition-colors hover:text-[#d4a843]"
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
+
+              <div className="w-full pt-6 mt-2 border-t border-[#2b2b24] space-y-3">
+                <button
+                  type="button"
+                  onClick={triggerSearch}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#333328] bg-[#171714] px-4 py-3 text-sm font-medium text-[#c5c2b8] hover:text-[#f0ece4] transition-colors"
                 >
-                  {link.label}
-                </a>
-              ))}
-              <div className="mt-4">
+                  <Search className="h-4 w-4 text-[#8a8a7a]" />
+                  <span>Search Projects &amp; Skills</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => {
                     setMobileOpen(false);
                     window.dispatchEvent(new CustomEvent("open-resume-modal"));
                   }}
-                  className="inline-flex items-center justify-center gap-2 bg-[#f0ece4] px-6 py-3 text-sm font-semibold text-[#0f0f0d] cursor-pointer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#f0ece4] px-4 py-3 text-sm font-semibold text-[#0f0f0d] transition-colors hover:bg-white"
                 >
                   <Download className="h-4 w-4" />
-                  <span>Resume</span>
+                  <span>Download Resume (PDF)</span>
                 </button>
               </div>
             </div>

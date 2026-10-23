@@ -119,14 +119,24 @@ html.lenis body {
   color: #fff;
 }
 
-/* Hide default cursor on desktop */
+/* Hide default cursor on desktop except inside interactive inputs */
 @media (min-width: 768px) {
   html,
   body,
-  *,
-  *::before,
-  *::after {
+  *:not(input):not(textarea):not(select):not([contenteditable="true"]),
+  *:not(input):not(textarea):not(select):not([contenteditable="true"])::before,
+  *:not(input):not(textarea):not(select):not([contenteditable="true"])::after {
     cursor: none !important;
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text !important;
+  }
+
+  select {
+    cursor: pointer !important;
   }
 }
 

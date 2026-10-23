@@ -73,6 +73,7 @@ export default function RetroArcadeModal() {
   const [mainView, setMainView] = useState<"skribbl" | "arcade" | "rankings">("skribbl");
   const [arcadeGame, setArcadeGame] = useState<"runner" | "snake" | "pong" | "reflex">("runner");
   const [sidebarTab, setSidebarTab] = useState<"chat" | "strangers">("chat");
+  const [mobilePane, setMobilePane] = useState<"stage" | "chat">("stage");
   const [isMuted, setIsMuted] = useState(false);
 
   // Visitor profile
@@ -145,20 +146,42 @@ export default function RetroArcadeModal() {
       sounds.playMinecraftXp();
     };
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpenRef.current) {
+    window.addEventListener("open-arcade", handleOpen);
+    return () => {
+      window.removeEventListener("open-arcade", handleOpen);
+    };
+  }, []);
+
+  // Lock document scroll when Lounge is open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevDocOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
         setIsOpen(false);
         isOpenRef.current = false;
       }
+      // Prevent arrow keys and space from scrolling the background while playing games
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
+        const target = e.target as HTMLElement;
+        if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+        e.preventDefault();
+      }
     };
 
-    window.addEventListener("open-arcade", handleOpen);
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeydown, { passive: false });
+
     return () => {
-      window.removeEventListener("open-arcade", handleOpen);
-      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevDocOverflow;
+      window.removeEventListener("keydown", handleKeydown);
     };
-  }, []);
+  }, [isOpen]);
 
   // Poll room data
   const fetchRoomData = async () => {
@@ -448,7 +471,9 @@ export default function RetroArcadeModal() {
   return (
     <AnimatePresence>
       <div
-        className="fixed inset-0 z-[1000] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+        data-lenis-prevent="true"
+        onWheel={(e) => e.stopPropagation()}
+        className="fixed inset-0 z-[1000] flex items-center justify-center p-2 sm:p-5 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
         onClick={() => {
           setIsOpen(false);
           isOpenRef.current = false;
@@ -461,8 +486,10 @@ export default function RetroArcadeModal() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 14 }}
           transition={{ duration: 0.2 }}
+          data-lenis-prevent="true"
+          onWheel={(e) => e.stopPropagation()}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-5xl h-[88vh] max-h-[720px] overflow-hidden rounded-2xl border border-[#2b2b24] bg-[#121210] shadow-[0_30px_90px_rgba(0,0,0,0.96)] text-[#f0ece4] outline-none flex flex-col select-none"
+          className="relative w-full max-w-5xl h-[92vh] sm:h-[88vh] max-h-[740px] overflow-hidden rounded-2xl border border-[#2b2b24] bg-[#121210] shadow-[0_30px_90px_rgba(0,0,0,0.96)] text-[#f0ece4] outline-none flex flex-col select-none"
         >
           {/* ROOM TOP HEADER */}
           <header className="flex items-center justify-between border-b border-[#2b2b24] bg-[#171714] px-4 py-2.5 flex-shrink-0">
@@ -481,44 +508,44 @@ export default function RetroArcadeModal() {
             </div>
 
             {/* Stage Selector Pills */}
-            <div className="flex items-center gap-1 rounded-xl border border-[#2b2b24] bg-[#121210] p-1">
+            <div className="flex items-center gap-0.5 sm:gap-1 rounded-xl border border-[#2b2b24] bg-[#121210] p-0.5 sm:p-1">
               <button
                 type="button"
-                onClick={() => { setMainView("skribbl"); sounds.playMinecraftPop(); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                onClick={() => { setMainView("skribbl"); setMobilePane("stage"); sounds.playMinecraftPop(); }}
+                className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                   mainView === "skribbl"
                     ? "bg-[#d4a843] text-[#0f0f0d] font-semibold shadow-sm"
                     : "text-[#8a8a7a] hover:text-[#f0ece4]"
                 }`}
               >
                 <Palette className="h-3.5 w-3.5" />
-                <span>Scribble Room</span>
+                <span>Scribble</span>
               </button>
 
               <button
                 type="button"
-                onClick={() => { setMainView("arcade"); sounds.playMinecraftPop(); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                onClick={() => { setMainView("arcade"); setMobilePane("stage"); sounds.playMinecraftPop(); }}
+                className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                   mainView === "arcade"
                     ? "bg-[#d4a843] text-[#0f0f0d] font-semibold shadow-sm"
                     : "text-[#8a8a7a] hover:text-[#f0ece4]"
                 }`}
               >
                 <Gamepad2 className="h-3.5 w-3.5" />
-                <span>Arcade Shelf</span>
+                <span>Arcade</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => { setMainView("rankings"); sounds.playMinecraftPop(); }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                   mainView === "rankings"
                     ? "bg-[#d4a843] text-[#0f0f0d] font-semibold shadow-sm"
                     : "text-[#8a8a7a] hover:text-[#f0ece4]"
                 }`}
               >
                 <Trophy className="h-3.5 w-3.5" />
-                <span>Rankings</span>
+                <span>Ranks</span>
               </button>
             </div>
 
@@ -588,10 +615,36 @@ export default function RetroArcadeModal() {
             </div>
           )}
 
+          {/* Mobile Stage vs Chat Toggle */}
+          <div className="flex md:hidden items-center justify-around border-b border-[#2b2b24] bg-[#141412] px-2 py-1.5 text-xs">
+            <button
+              type="button"
+              onClick={() => setMobilePane("stage")}
+              className={`flex-1 py-1 rounded text-center font-medium transition-colors ${
+                mobilePane === "stage"
+                  ? "bg-[#d4a843]/20 text-[#d4a843] border border-[#d4a843]/40 font-semibold"
+                  : "text-[#8a8a7a]"
+              }`}
+            >
+              🎮 Stage View
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobilePane("chat")}
+              className={`flex-1 py-1 rounded text-center font-medium transition-colors ${
+                mobilePane === "chat"
+                  ? "bg-[#d4a843]/20 text-[#d4a843] border border-[#d4a843]/40 font-semibold"
+                  : "text-[#8a8a7a]"
+              }`}
+            >
+              💬 Live Chat ({messages.length})
+            </button>
+          </div>
+
           {/* TWO-COLUMN ROOM BODY (Stage on Left, Live Sidebar on Right) */}
           <div className="flex-1 grid grid-cols-1 md:grid-cols-12 min-h-0 overflow-hidden">
             {/* LEFT COLUMN: THE ACTIVE STAGE (~65%) */}
-            <div className="md:col-span-7 lg:col-span-8 flex flex-col border-b md:border-b-0 md:border-r border-[#2b2b24] min-h-0 bg-[#0f0f0d]">
+            <div className={`md:col-span-7 lg:col-span-8 flex flex-col border-b md:border-b-0 md:border-r border-[#2b2b24] min-h-0 bg-[#0f0f0d] ${mobilePane === "stage" ? "flex" : "hidden md:flex"}`}>
               {/* STAGE A: SCRIBBLE ROOM */}
               {mainView === "skribbl" && (
                 <div className="flex flex-col h-full">
@@ -794,7 +847,7 @@ export default function RetroArcadeModal() {
             </div>
 
             {/* RIGHT COLUMN: LIVE SIDEBAR (~35%) */}
-            <div className="md:col-span-5 lg:col-span-4 flex flex-col min-h-0 bg-[#141412]">
+            <div className={`md:col-span-5 lg:col-span-4 flex flex-col min-h-0 bg-[#141412] ${mobilePane === "chat" ? "flex" : "hidden md:flex"}`}>
               {/* Sidebar Header: Visitor Profile + Sidebar Tab Switcher */}
               <div className="p-3 border-b border-[#2b2b24] bg-[#171714] flex items-center justify-between gap-2 flex-shrink-0">
                 {/* Profile Pill */}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Trophy, RotateCw } from "lucide-react";
-import { LeaderboardEntry } from "@/app/api/lounge/route";
+import { LeaderboardEntry } from "./types";
 
 export default function LeaderboardView() {
   const [activeGame, setActiveGame] = useState<"skribbl" | "runner" | "snake" | "pong" | "reflex">("skribbl");

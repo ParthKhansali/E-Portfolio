@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:resume": "node scripts/generate_resume.js"
+    "generate:resume": "node scripts/generate_resume.js",
+    "build:pages": "node scripts/build_pages.mjs"
   },
   "dependencies": {
     "animejs": "^4.5.0",

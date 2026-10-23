@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
+import { asset } from "@/lib/basepath";
+import { sounds } from "@/lib/soundFx";
 
 const CURRENT_CARDS = [
   {
@@ -41,6 +43,13 @@ const RABBIT_HOLES = [
 export default function About() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "100px" });
+  // Default to video on first visit and every refresh, switch to pfp when user clicks option
+  const [showVideo, setShowVideo] = useState(true);
+
+  const toggleMedia = () => {
+    sounds.playClick(900, 0.02);
+    setShowVideo((prev) => !prev);
+  };
 
   return (
     <section
@@ -73,23 +82,42 @@ export default function About() {
                   <span className="h-2 w-2 rounded-full bg-[#8fb573]" />
                   <span>Dehradun, India</span>
                 </div>
-                <span className="font-mono text-[10px] text-[#8a8a7a] tracking-wider uppercase">
-                  Profile
-                </span>
+                <button
+                  type="button"
+                  onClick={toggleMedia}
+                  title="Toggle between alter-ego video and profile photo"
+                  className="border border-[#333328] px-2.5 py-0.5 text-[10px] text-[#b5b0a1] hover:border-[#555548] hover:text-[#f0ece4] transition-colors cursor-pointer rounded"
+                >
+                  {showVideo ? "Photo" : "Alter-ego"}
+                </button>
               </div>
 
-              {/* Photo Frame */}
+              {/* Photo / Video Frame */}
               <div
-                className="relative aspect-square w-full overflow-hidden rounded-lg border border-[#333328] bg-[#1e1e1a]"
+                onClick={toggleMedia}
+                className="relative aspect-square w-full overflow-hidden rounded-lg border border-[#333328] bg-[#1e1e1a] cursor-pointer group"
+                title="Click to toggle visual"
               >
-                <Image
-                  src="/profile.jpg"
-                  alt="Parth Khansali"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 380px"
-                  className="object-cover transition-transform duration-500 hover:scale-[1.02]"
-                  priority
-                />
+                {showVideo ? (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-full w-full object-cover"
+                  >
+                    <source src={asset("/media/glitch-eyes.mp4")} type="video/mp4" />
+                  </video>
+                ) : (
+                  <Image
+                    src={asset("/profile.jpg")}
+                    alt="Parth Khansali"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 380px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    priority
+                  />
+                )}
               </div>
 
               {/* Caption */}
